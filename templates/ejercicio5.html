@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 5 - Bootstrap para el Percentil 90</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --azure: #89CDF1;
+      --mint: #7ED4AD;
+      --coral: #F4A6A6;
+      --pink: #F48FB1;
+      --plum: #A855F7;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Header elegante */
+    .hero-section {
+      background: linear-gradient(135deg, var(--azure) 0%, var(--plum) 100%);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Layout principal de 2 columnas */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      align-items: start;
+    }
+
+    /* Columna izquierda - Controles */
+    .left-column {
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+    }
+
+    /* Columna derecha - Contenido principal */
+    .right-column {
+      min-height: 100vh;
+    }
+
+    .right-column .main-card {
+      height: fit-content;
+    }
+
+    /* Cards principales */
+    .main-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: none;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .main-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .card-header-custom {
+      padding: 1.5rem;
+      border: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      position: relative;
+    }
+
+    .header-teoria {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+      color: white;
+    }
+
+    .header-datos {
+      background: linear-gradient(135deg, var(--mint), var(--coral));
+      color: white;
+    }
+
+    .header-controles {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+    }
+
+    .header-proceso {
+      background: linear-gradient(135deg, var(--pink), var(--plum));
+      color: white;
+    }
+
+    .header-resultados {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+      color: white;
+    }
+
+    /* Estadísticas circulares mejoradas */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-circle::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.05) rotate(180deg); }
+    }
+
+    .stat-1 { background: linear-gradient(135deg, var(--azure), var(--mint)); }
+    .stat-2 { background: linear-gradient(135deg, var(--mint), var(--coral)); }
+    .stat-3 { background: linear-gradient(135deg, var(--coral), var(--pink)); }
+
+    .stat-value {
+      font-size: 1.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    /* Botones mejorados */
+    .btn-custom {
+      border-radius: 25px;
+      font-weight: 600;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-custom::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-iniciar {
+      background: linear-gradient(135deg, var(--mint), var(--azure));
+      color: white;
+      animation: btn-pulse 2s infinite;
+    }
+
+    .btn-siguiente {
+      background: linear-gradient(135deg, var(--azure), var(--plum));
+      color: white;
+    }
+
+    .btn-automatico {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+    }
+
+    .btn-reiniciar {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+    }
+
+    @keyframes btn-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+      50% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    }
+
+    /* Progreso personalizado */
+    .progress-custom {
+      height: 25px;
+      background: linear-gradient(90deg, #f1f3f4, #e8eaed);
+      border-radius: 25px;
+      overflow: hidden;
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .progress-bar-custom {
+      height: 100%;
+      background: linear-gradient(90deg, var(--azure), var(--mint), var(--coral), var(--pink), var(--plum));
+      border-radius: 25px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-custom::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Pasos del proceso - Scroll vertical */
+    .pasos-container {
+      height: auto;
+      max-height: none;
+      overflow-y: visible;
+      padding-right: 0.5rem;
+    }
+
+    .pasos-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .pasos-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .pasos-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, var(--azure), var(--plum));
+      border-radius: 10px;
+    }
+
+    .pasos-container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+    }
+
+    .paso-card {
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .paso-activo {
+      border-color: var(--azure);
+      box-shadow: 0 0 20px rgba(137, 205, 241, 0.3);
+      transform: scale(1.01);
+    }
+
+    .paso-completado {
+      border-color: var(--mint);
+      background: linear-gradient(145deg, #f0fff4, #e6fffa);
+      opacity: 0.9;
+    }
+
+    .paso-header {
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-bottom: 1px solid #dee2e6;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .paso-activo .paso-header {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+      color: white;
+    }
+
+    .paso-completado .paso-header {
+      background: linear-gradient(135deg, var(--mint), var(--coral));
+      color: white;
+    }
+
+    .paso-content {
+      padding: 1.5rem;
+      min-height: auto;
+    }
+
+    /* Cajas de contenido */
+    .concept-box {
+      background: linear-gradient(145deg, #f0f7ff, #e6f3ff);
+      border-left: 5px solid var(--azure);
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 15px 15px 0;
+      position: relative;
+    }
+
+    .concept-box::before {
+      content: '💡';
+      position: absolute;
+      top: -8px;
+      left: -12px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .example-box {
+      background: linear-gradient(145deg, #fff8e1, #fff3c4);
+      border-left: 5px solid var(--coral);
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 15px 15px 0;
+      position: relative;
+    }
+
+    .example-box::before {
+      content: '🎓';
+      position: absolute;
+      top: -8px;
+      left: -12px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .formula-box {
+      background: linear-gradient(145deg, #f1f8e9, #e8f5e9);
+      border: 3px dashed var(--mint);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 15px;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      position: relative;
+    }
+
+    .formula-box::before {
+      content: '📐';
+      position: absolute;
+      top: -12px;
+      left: 15px;
+      background: white;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .interactive-demo {
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      border: 2px solid #e9ecef;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Highlights y badges */
+    .stat-highlight {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-block;
+      box-shadow: 0 2px 10px rgba(244, 166, 166, 0.3);
+    }
+
+    .badge-custom {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Modal para resultados */
+    .results-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1050;
+      padding: 2rem;
+    }
+
+    .results-content {
+      background: white;
+      border-radius: 20px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #666;
+      z-index: 1;
+    }
+
+    /* Canvas mejorado */
+    #graficoCanvas {
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      background: white;
+      max-width: 100%;
+    }
+
+    /* Elementos específicos para percentiles */
+    .score-item {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 3px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      position: relative;
+      color: white;
+    }
+
+    .score-low {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+    }
+
+    .score-medium {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+    }
+
+    .score-high {
+      background: linear-gradient(135deg, var(--mint), var(--plum));
+    }
+
+    .score-item.percentile-90 {
+      border: 3px solid gold;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+      transform: scale(1.1);
+      animation: percentile-glow 2s infinite;
+    }
+
+    @keyframes percentile-glow {
+      0%, 100% { box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4); }
+      50% { box-shadow: 0 6px 25px rgba(255, 215, 0, 0.7); }
+    }
+
+    .percentile-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .distribution-bar {
+      height: 40px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 1rem 0;
+      position: relative;
+      background: linear-gradient(90deg, var(--coral), var(--azure), var(--mint), var(--plum));
+    }
+
+    .percentile-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: gold;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    }
+
+    .percentile-label {
+      position: absolute;
+      top: -25px;
+      transform: translateX(-50%);
+      background: gold;
+      color: black;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    .academic-levels {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .academic-level {
+      background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .academic-level::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .level-fail::before { background: var(--coral); }
+    .level-pass::before { background: var(--azure); }
+    .level-good::before { background: var(--mint); }
+    .level-excellent::before { background: var(--plum); }
+
+    .academic-level.active {
+      border-color: var(--plum);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+    }
+
+    .academic-level .range {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--plum);
+    }
+
+    .academic-level .label {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+    .academic-level .description {
+      font-size: 0.7rem;
+      color: #888;
+      margin-top: 0.2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .left-column {
+        position: relative;
+        top: 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .stat-circle {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .stat-value {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 2rem 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .btn-custom {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .main-layout {
+        padding: 0 0.5rem;
+      }
+
+      .academic-levels {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .score-item {
+        width: 40px;
+        height: 40px;
+        font-size: 0.75rem;
+      }
+    }
+
+    /* Animaciones de entrada */
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Volver button */
+    .btn-volver {
+      background: linear-gradient(135deg, #6c757d, #495057);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.6rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-bottom: 2rem;
+    }
+
+    .btn-volver:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      color: white;
+    }
+
+    /* Tooltip mejorado */
+    .tooltip-custom {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      color: var(--plum);
+      text-decoration: underline dotted;
+      font-weight: 600;
+    }
+
+    .tooltip-custom:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      z-index: 1000;
+      font-size: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .tooltip-custom:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 115%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #333;
+      z-index: 1000;
+    }
+
+    .score-formatter {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+
+    /* Excellence threshold visualization */
+    .excellence-threshold {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: linear-gradient(145deg, #fff8e1, #fff3c4);
+      border-radius: 12px;
+      border-left: 5px solid gold;
+      position: relative;
+    }
+
+    .excellence-threshold::before {
+      content: '🏆';
+      position: absolute;
+      top: -8px;
+      left: -12px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .threshold-line {
+      height: 2px;
+      background: gold;
+      margin: 0.5rem 0;
+      position: relative;
+    }
+
+    .threshold-point {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      background: gold;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header Hero -->
+<div class="hero-section">
+  <div class="container">
+    <div class="hero-content text-center">
+      <h1 class="display-4 fw-bold mb-3">
+        <i class="bi bi-trophy-fill"></i> Bootstrap para el Percentil 90
+      </h1>
+      <p class="lead mb-4">Define el umbral de excelencia académica usando Bootstrap</p>
+      <div class="badge-custom">
+        <i class="bi bi-mortarboard-fill"></i> Ejercicio Interactivo • Nivel Avanzado • 15-20 min
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <!-- Navegación -->
+  <div class="mb-4 text-center">
+    <a href="/" class="btn btn-volver">
+      <i class="bi bi-arrow-left"></i> Volver a Ejercicios
+    </a>
+  </div>
+
+  <!-- Layout principal de 2 columnas -->
+  <div class="main-layout">
+    
+    <!-- COLUMNA IZQUIERDA - CONTROLES -->
+    <div class="left-column">
+      
+      <!-- 1. TEORÍA FUNDAMENTAL -->
+      <div class="main-card">
+        <div class="card-header-custom header-teoria">
+          <i class="bi bi-book-fill me-2"></i>
+          Percentiles en Educación
+        </div>
+        <div class="p-3">
+          <div class="concept-box">
+            <h6 class="fw-bold mb-2">¿Qué es un Percentil?</h6>
+            <p class="mb-2 small">El <strong>percentil k</strong> es el valor por debajo del cual se encuentra el k% de los datos. El <span class="tooltip-custom" data-tooltip="Separa el 10% superior del resto">percentil 90</span> define excelencia académica.</p>
+          </div>
+          
+          <div class="example-box">
+            <h6 class="fw-bold mb-2">Contexto Académico</h6>
+            <p class="mb-0 small">Un profesor necesita identificar el umbral que separa al 10% superior de estudiantes para definir criterios de excelencia académica.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. CONFIGURACIÓN DE DATOS -->
+      <div class="main-card">
+        <div class="card-header-custom header-datos">
+          <i class="bi bi-graph-up me-2"></i>
+          Puntuaciones de Estudiantes
+        </div>
+        <div class="p-3">
+          <div class="interactive-demo">
+            <label class="form-label fw-bold mb-2 small">
+              <i class="bi bi-clipboard-data"></i> Puntuaciones (0-100):
+            </label>
+            <input type="text" id="datosInput" class="form-control mb-3" 
+                   value="65, 72, 78, 85, 90, 67, 74, 82, 88, 76, 79, 83, 91, 69, 77">
+            <div class="d-grid gap-2">
+              <button onclick="actualizarDatos()" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+              </button>
+              <button onclick="generarDatosAleatorios()" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-dice-3-fill"></i> Aleatorios
+              </button>
+            </div>
+          </div>
+          
+          <div class="stats-grid">
+            <div class="text-center">
+              <div class="stat-circle stat-1">
+                <div class="stat-value" id="tamanoMuestra">15</div>
+                <div class="stat-label">Estudiantes</div>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="stat-circle stat-2">
+                <div class="stat-value score-formatter" id="mediaOriginal">77.5</div>
+                <div class="stat-label">Media</div>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="stat-circle stat-3">
+                <div class="stat-value score-formatter" id="percentil90Original">90.0</div>
+                <div class="stat-label">Percentil 90</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. CONTROLES DE SIMULACIÓN -->
+      <div class="main-card">
+        <div class="card-header-custom header-controles">
+          <i class="bi bi-controller me-2"></i>
+          Controles de Simulación
+        </div>
+        <div class="p-3">
+          <div class="d-grid gap-2">
+            <button id="btnIniciar" onclick="iniciarProceso()" class="btn-custom btn-iniciar">
+              <i class="bi bi-play-fill"></i> Iniciar Simulación
+            </button>
+            <button id="btnSiguiente" onclick="siguientePaso()" class="btn-custom btn-siguiente" disabled>
+              <i class="bi bi-skip-forward-fill"></i> Siguiente Paso
+            </button>
+            <button id="btnAutomatico" onclick="modoAutomatico()" class="btn-custom btn-automatico" disabled>
+              <i class="bi bi-lightning-fill"></i> Modo Automático
+            </button>
+            <button id="btnReiniciar" onclick="reiniciar()" class="btn-custom btn-reiniciar">
+              <i class="bi bi-arrow-clockwise"></i> Reiniciar
+            </button>
+          </div>
+          
+          <div class="progress-custom">
+            <div id="progreso" class="progress-bar-custom" style="width: 0%"></div>
+          </div>
+          <div class="text-center">
+            <small class="text-muted fw-bold">
+              Paso <span id="pasoActual">0</span> de 7 • 
+              <span id="porcentaje">0%</span>
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PREGUNTAS DE COMPRENSIÓN -->
+      <div class="main-card">
+        <div class="card-header-custom" style="background: linear-gradient(135deg, var(--plum), var(--coral)); color: white;">
+          <i class="bi bi-question-circle-fill me-2"></i>
+          Verificación de Aprendizaje
+        </div>
+        <div class="p-3">
+          <div id="preguntasComprension" style="display:none;">
+            <div class="mb-3">
+              <h6 class="small fw-bold">1. ¿Por qué Bootstrap para percentiles?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(1)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta1" class="alert alert-info mt-2 small" style="display:none;">
+                Los percentiles extremos (como P90) son sensibles a valores atípicos y muestras pequeñas.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="small fw-bold">2. ¿Diferencia entre percentil y porcentaje?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(2)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta2" class="alert alert-info mt-2 small" style="display:none;">
+                Percentil es posición relativa en distribución; porcentaje es proporción de un total.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="small fw-bold">3. ¿Uso en evaluación educativa?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(3)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta3" class="alert alert-info mt-2 small" style="display:none;">
+                Definir criterios de excelencia, becas, programas especiales y rankings académicos.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA - PROCESO PASO A PASO -->
+    <div class="right-column">
+      <div class="main-card">
+        <div class="card-header-custom header-proceso">
+          <i class="bi bi-list-check me-2"></i>
+          Proceso Bootstrap para el Percentil 90
+        </div>
+        <div class="pasos-container p-3">
+          
+          <!-- Paso 0: Conceptos Fundamentales -->
+          <div id="paso0" class="paso-card paso-activo">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-rocket-takeoff-fill me-2"></i>
+                Paso 0: Conceptos Fundamentales
+              </h5>
+            </div>
+            <div id="contenido0" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 1: Estadístico Original -->
+          <div id="paso1" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calculator-fill me-2"></i>
+                Paso 1: Calcular el Percentil 90 Original
+              </h5>
+            </div>
+            <div id="contenido1" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 2: Primera Muestra Bootstrap -->
+          <div id="paso2" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-shuffle me-2"></i>
+                Paso 2: Generar Primera Muestra Bootstrap
+              </h5>
+            </div>
+            <div id="contenido2" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 3: Calcular Percentil Bootstrap -->
+          <div id="paso3" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calculator me-2"></i>
+                Paso 3: Calcular Percentil 90 Bootstrap
+              </h5>
+            </div>
+            <div id="contenido3" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 4: Repetir Proceso -->
+          <div id="paso4" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-arrow-repeat me-2"></i>
+                Paso 4: Repetir el Proceso (1000 veces)
+              </h5>
+            </div>
+            <div id="contenido4" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 5: Analizar Distribución -->
+          <div id="paso5" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-bar-chart-fill me-2"></i>
+                Paso 5: Analizar la Distribución Bootstrap
+              </h5>
+            </div>
+            <div id="contenido5" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 6: Intervalos de Confianza -->
+          <div id="paso6" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-graph-up-arrow me-2"></i>
+                Paso 6: Calcular Intervalos de Confianza
+              </h5>
+            </div>
+            <div id="contenido6" class="paso-content" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Resultados -->
+<div id="resultsModal" class="results-modal">
+  <div class="results-content">
+    <button class="modal-close" onclick="cerrarResultados()">&times;</button>
+    <div class="main-card m-0">
+      <div class="card-header-custom header-resultados">
+        <i class="bi bi-trophy-fill me-2"></i>
+        Resultados Finales del Bootstrap
+      </div>
+      <div class="p-4">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="p-4 bg-light rounded-3 h-100">
+              <h5 class="mb-3">
+                <i class="bi bi-clipboard-data-fill text-primary me-2"></i>
+                Resumen de Resultados
+              </h5>
+              <table class="table table-borderless">
+                <tr>
+                  <td class="fw-bold">Tamaño de muestra:</td>
+                  <td><span class="badge-custom" id="resultTamano"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Percentil 90 original:</td>
+                  <td><span class="stat-highlight" id="resultPercentil"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Percentil 90 bootstrap:</td>
+                  <td><span class="stat-highlight" id="resultPercentilBootstrap"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Intervalo de Confianza 95%:</td>
+                  <td><span class="stat-highlight" id="resultIC"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="p-4 bg-info bg-opacity-10 rounded-3 h-100">
+              <h5 class="mb-3">
+                <i class="bi bi-lightbulb-fill text-info me-2"></i>
+                Interpretación Académica
+              </h5>
+              <p id="interpretacionResultados" class="mb-3"></p>
+              <div class="alert alert-success border-0">
+                <h6 class="alert-heading">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Recomendación Educativa
+                </h6>
+                <p id="conclusionFinal" class="mb-0"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <h5 class="mb-3">
+            <i class="bi bi-graph-up text-primary me-2"></i>
+            Distribución Bootstrap del Percentil 90
+          </h5>
+          <div class="text-center">
+            <canvas id="graficoCanvas" width="800" height="400"></canvas>
+          </div>
+        </div>
+        
+        <div class="mt-4 text-center">
+          <button onclick="descargarResultados()" class="btn btn-custom btn-siguiente me-2" style="width: auto;">
+            <i class="bi bi-download"></i> Descargar Resultados
+          </button>
+          <button onclick="compartirResultados()" class="btn btn-custom btn-automatico" style="width: auto;">
+            <i class="bi bi-share-fill"></i> Compartir Resultados
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Variables globales
+let datos = [65, 72, 78, 85, 90, 67, 74, 82, 88, 76, 79, 83, 91, 69, 77];
+let pasoActual = 0;
+let percentil90Original = 0;
+let mediaOriginal = 0;
+let muestrasBootstrap = [];
+let percentiles90Bootstrap = [];
+let modoAuto = false;
+
+// Función para calcular percentil
+function calcularPercentil(arr, percentil) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const index = (percentil / 100) * (sorted.length - 1);
+  const lower = Math.floor(index);
+  const upper = Math.ceil(index);
+  
+  if (lower === upper) {
+    return sorted[lower];
+  }
+  
+  const weight = index - lower;
+  return sorted[lower] * (1 - weight) + sorted[upper] * weight;
+}
+
+// Función para clasificar puntuación
+function clasificarPuntuacion(puntuacion) {
+  if (puntuacion < 60) return 'score-low';
+  if (puntuacion < 80) return 'score-medium';
+  return 'score-high';
+}
+
+// Función para obtener rango académico
+function obtenerRangoAcademico(puntuacion) {
+  if (puntuacion < 60) return { nivel: 'Insuficiente', rango: '0-59', clase: 'level-fail' };
+  if (puntuacion < 70) return { nivel: 'Suficiente', rango: '60-69', clase: 'level-pass' };
+  if (puntuacion < 85) return { nivel: 'Notable', rango: '70-84', clase: 'level-good' };
+  return { nivel: 'Sobresaliente', rango: '85-100', clase: 'level-excellent' };
+}
+
+// Función para actualizar datos
+function actualizarDatos() {
+  const input = document.getElementById('datosInput').value;
+  try {
+    datos = input.split(',').map(x => {
+      const val = parseFloat(x.trim());
+      if (isNaN(val) || val < 0 || val > 100) throw new Error('Valores entre 0 y 100');
+      return val;
+    });
+    
+    if (datos.length < 5) throw new Error('Necesitas al menos 5 valores');
+    
+    calcularEstadisticos();
+    reiniciar();
+    
+    mostrarNotificacion('✅ Puntuaciones actualizadas correctamente', 'success');
+    
+  } catch (e) {
+    mostrarNotificacion('❌ Error: Ingresa puntuaciones válidas (0-100) separadas por comas', 'danger');
+  }
+}
+
+// Función para generar datos aleatorios de puntuaciones
+function generarDatosAleatorios() {
+  const n = Math.floor(Math.random() * 15) + 12; // Entre 12 y 27 estudiantes
+  
+  datos = [];
+  for(let i = 0; i < n; i++) {
+    let puntuacion;
+    const rand = Math.random();
+    
+    if (rand < 0.1) {
+      // 10% puntuaciones bajas (30-59)
+      puntuacion = 30 + Math.random() * 30;
+    } else if (rand < 0.4) {
+      // 30% puntuaciones medias (60-74)
+      puntuacion = 60 + Math.random() * 15;
+    } else if (rand < 0.8) {
+      // 40% puntuaciones buenas (75-89)
+      puntuacion = 75 + Math.random() * 15;
+    } else {
+      // 20% puntuaciones excelentes (90-100)
+      puntuacion = 90 + Math.random() * 10;
+    }
+    
+    datos.push(Math.round(puntuacion * 10) / 10); // Redondear a 1 decimal
+  }
+  
+  document.getElementById('datosInput').value = datos.join(', ');
+  calcularEstadisticos();
+  reiniciar();
+  mostrarNotificacion('🎲 Puntuaciones académicas aleatorias generadas', 'info');
+}
+
+// Función para calcular estadísticos
+function calcularEstadisticos() {
+  mediaOriginal = datos.reduce((a, b) => a + b, 0) / datos.length;
+  percentil90Original = calcularPercentil(datos, 90);
+  
+  document.getElementById('tamanoMuestra').textContent = datos.length;
+  document.getElementById('mediaOriginal').textContent = mediaOriginal.toFixed(1);
+  document.getElementById('percentil90Original').textContent = percentil90Original.toFixed(1);
+}
+
+// Función para iniciar el proceso
+function iniciarProceso() {
+  calcularEstadisticos();
+  pasoActual = 0;
+  document.getElementById('btnIniciar').disabled = true;
+  document.getElementById('btnSiguiente').disabled = false;
+  document.getElementById('btnAutomatico').disabled = false;
+  document.getElementById('preguntasComprension').style.display = 'block';
+  siguientePaso();
+}
+
+// Función para modo automático
+function modoAutomatico() {
+  modoAuto = true;
+  document.getElementById('btnAutomatico').disabled = true;
+  document.getElementById('btnSiguiente').disabled = true;
+  
+  function avanzarAutomatico() {
+    if (pasoActual < 7 && modoAuto) {
+      siguientePaso();
+      setTimeout(avanzarAutomatico, 2500);
+    }
+  }
+  avanzarAutomatico();
+}
+
+// Función principal para avanzar pasos
+function siguientePaso() {
+  if (pasoActual > 0) {
+    document.getElementById(`paso${pasoActual-1}`).classList.remove('paso-activo');
+    document.getElementById(`paso${pasoActual-1}`).classList.add('paso-completado');
+  }
+  
+  if (pasoActual < 7) {
+    document.getElementById(`paso${pasoActual}`).classList.add('paso-activo');
+    const contenido = document.getElementById(`contenido${pasoActual}`);
+    contenido.style.display = 'block';
+    contenido.classList.add('fade-in');
+    
+    // Scroll al paso activo
+    document.getElementById(`paso${pasoActual}`).scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'center' 
+    });
+    
+    ejecutarPaso(pasoActual);
+    pasoActual++;
+    
+    // Actualizar progreso
+    const progreso = (pasoActual / 7) * 100;
+    document.getElementById('progreso').style.width = progreso + '%';
+    document.getElementById('pasoActual').textContent = pasoActual;
+    document.getElementById('porcentaje').textContent = Math.round(progreso) + '%';
+    
+    if (pasoActual >= 7) {
+      document.getElementById('btnSiguiente').disabled = true;
+      document.getElementById('btnAutomatico').disabled = true;
+      mostrarResultados();
+    }
+  }
+}
+
+// Función para mostrar resultados en modal
+function mostrarResultados() {
+  const percentil90BootstrapFinal = percentiles90Bootstrap.reduce((a, b) => a + b, 0) / percentiles90Bootstrap.length;
+  percentiles90Bootstrap.sort((a, b) => a - b);
+  const ic95_inf = percentiles90Bootstrap[Math.floor(0.025 * percentiles90Bootstrap.length)];
+  const ic95_sup = percentiles90Bootstrap[Math.floor(0.975 * percentiles90Bootstrap.length)];
+  
+  document.getElementById('resultTamano').textContent = datos.length + ' estudiantes';
+  document.getElementById('resultPercentil').textContent = percentil90Original.toFixed(1) + ' pts';
+  document.getElementById('resultPercentilBootstrap').textContent = percentil90BootstrapFinal.toFixed(1) + ' pts';
+  document.getElementById('resultIC').textContent = `[${ic95_inf.toFixed(1)}, ${ic95_sup.toFixed(1)}] pts`;
+  
+  // Interpretación
+  const amplitudIC = ic95_sup - ic95_inf;
+  const precision = amplitudIC < 5 ? "muy precisa" : amplitudIC < 10 ? "moderadamente precisa" : "poco precisa";
+  
+  document.getElementById('interpretacionResultados').innerHTML = `
+    La estimación del percentil 90 es <strong>${precision}</strong> con una amplitud del IC de ${amplitudIC.toFixed(1)} puntos. 
+    El umbral de excelencia académica se establece en ${percentil90Original.toFixed(1)} puntos.
+  `;
+  
+  let recomendacion;
+  if (percentil90Original >= 95) {
+    recomendacion = "Estándar de excelencia muy alto. Considerar programas especiales para talentos excepcionales.";
+  } else if (percentil90Original >= 90) {
+    recomendacion = "Estándar de excelencia apropiado. Ideal para programas de honor y becas académicas.";
+  } else if (percentil90Original >= 85) {
+    recomendacion = "Estándar moderado de excelencia. Revisar si es suficientemente desafiante.";
+  } else {
+    recomendacion = "Estándar bajo de excelencia. Considerar estrategias de mejora académica general.";
+  }
+  
+  document.getElementById('conclusionFinal').innerHTML = recomendacion;
+  
+  document.getElementById('resultsModal').style.display = 'flex';
+  dibujarHistograma();
+}
+
+function cerrarResultados() {
+  document.getElementById('resultsModal').style.display = 'none';
+}
+
+// Función para ejecutar cada paso
+function ejecutarPaso(paso) {
+  const contenido = document.getElementById(`contenido${paso}`);
+  
+  switch(paso) {
+    case 0:
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-3">🎯 Objetivo del Ejercicio</h6>
+          <p class="mb-3">Determinar el <strong>percentil 90 de las puntuaciones</strong> de <strong>${datos.length} estudiantes</strong> 
+          para establecer el umbral que define la excelencia académica (10% superior).</p>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-3">📐 Cálculo del Percentil 90</h6>
+          <div style="font-size: 1.1em; margin: 1rem 0;">
+            <strong>P90 = valor que deja el 90% por debajo</strong><br>
+            <small>Índice = 0.90 × (n-1)</small>
+          </div>
+          <p class="mb-0 small">Interpolación lineal si el índice no es entero</p>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-3">🎓 Importancia en Educación</h6>
+          <p class="mb-3">El percentil 90 actual es <span class="stat-highlight">${percentil90Original.toFixed(1)} pts</span>:</p>
+          <ul class="mb-3 small">
+            <li>Define criterios objetivos de excelencia académica</li>
+            <li>Identifica candidatos para programas especiales</li>
+            <li>Establece umbrales para becas y reconocimientos</li>
+          </ul>
+          <div class="alert alert-info border-0 mb-0 small">
+            <strong>👉 El Bootstrap</strong> nos dará intervalos de confianza para este umbral de excelencia.
+          </div>
+        </div>`;
+      break;
+      
+    case 1:
+      const datosOrdenados = [...datos].sort((a, b) => a - b);
+      const posicion90 = Math.floor(0.9 * (datos.length - 1));
+      const rangoAcademico = obtenerRangoAcademico(percentil90Original);
+      
+      contenido.innerHTML = `
+        <div class="alert alert-primary border-0 mb-3">
+          <h6 class="fw-bold mb-2"><i class="bi bi-graph-up me-2"></i>Puntuaciones de Estudiantes</h6>
+          <div class="percentile-visual">
+            ${datosOrdenados.map((puntuacion, i) => 
+              `<div class="score-item ${clasificarPuntuacion(puntuacion)} ${i >= posicion90 ? 'percentile-90' : ''}">
+                ${puntuacion.toFixed(0)}
+              </div>`
+            ).join('')}
+          </div>
+          <p class="mb-0 small"><strong>n = ${datos.length} estudiantes</strong></p>
+        </div>
+        
+        <div class="distribution-bar">
+          <div class="percentile-marker" style="left: 90%">
+            <div class="percentile-label">P90</div>
+          </div>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-2">Cálculo paso a paso:</h6>
+          <p class="mb-1 small">1. Ordenar datos: ${datos.length} valores</p>
+          <p class="mb-1 small">2. Posición P90: 0.90 × (${datos.length}-1) = ${(0.9 * (datos.length-1)).toFixed(1)}</p>
+          <p class="mb-0">3. Percentil 90 = <span class="stat-highlight">${percentil90Original.toFixed(1)} pts</span></p>
+        </div>
+        
+        <div class="academic-levels">
+          <div class="academic-level level-fail">
+            <div class="range">0-59</div>
+            <div class="label">Insuficiente</div>
+            <div class="description">${datosOrdenados.filter(x => x < 60).length} estudiantes</div>
+          </div>
+          <div class="academic-level level-pass">
+            <div class="range">60-69</div>
+            <div class="label">Suficiente</div>
+            <div class="description">${datosOrdenados.filter(x => x >= 60 && x < 70).length} estudiantes</div>
+          </div>
+          <div class="academic-level level-good">
+            <div class="range">70-84</div>
+            <div class="label">Notable</div>
+            <div class="description">${datosOrdenados.filter(x => x >= 70 && x < 85).length} estudiantes</div>
+          </div>
+          <div class="academic-level level-excellent ${rangoAcademico.clase === 'level-excellent' ? 'active' : ''}">
+            <div class="range">85-100</div>
+            <div class="label">Sobresaliente</div>
+            <div class="description">${datosOrdenados.filter(x => x >= 85).length} estudiantes</div>
+          </div>
+        </div>
+        
+        <div class="excellence-threshold">
+          <h6 class="fw-bold mb-2">🏆 Umbral de Excelencia</h6>
+          <p class="mb-2 small">Solo el <strong>10%</strong> de estudiantes supera ${percentil90Original.toFixed(1)} puntos</p>
+          <div class="threshold-line">
+            <div class="threshold-point"></div>
+          </div>
+        </div>`;
+      break;
+      
+    case 2:
+      const muestraBootstrap = generarMuestraBootstrap();
+      muestrasBootstrap.push(muestraBootstrap);
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">🎲 Remuestreo con Reemplazo</h6>
+          <p class="mb-2 small">Seleccionamos ${datos.length} puntuaciones al azar de nuestros datos originales, <strong>con reemplazo</strong>.</p>
+        </div>
+        
+        <div class="interactive-demo">
+          <h6 class="fw-bold mb-2">Primera Muestra Bootstrap:</h6>
+          <div class="percentile-visual mb-3">
+            ${muestraBootstrap.map(puntuacion => 
+              `<div class="score-item ${clasificarPuntuacion(puntuacion)}">
+                ${puntuacion.toFixed(0)}
+              </div>`
+            ).join('')}
+          </div>
+          <div class="row text-center">
+            <div class="col-4">
+              <div class="p-2 bg-light rounded">
+                <strong>${muestraBootstrap.length}</strong>
+                <br><small class="text-muted">Total</small>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-2 bg-light rounded">
+                <strong>${(muestraBootstrap.reduce((a,b) => a+b, 0) / muestraBootstrap.length).toFixed(1)}</strong>
+                <br><small class="text-muted">Media</small>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="p-2 bg-light rounded">
+                <strong>${Math.max(...muestraBootstrap).toFixed(1)}</strong>
+                <br><small class="text-muted">Máximo</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-2">🔍 Observación</h6>
+          <p class="mb-0 small">Esta muestra bootstrap simula otro grupo de estudiantes evaluados bajo las mismas condiciones.</p>
+        </div>`;
+      break;
+      
+    case 3:
+      const percentil90Bootstrap = calcularPercentil(muestrasBootstrap[0], 90);
+      percentiles90Bootstrap.push(percentil90Bootstrap);
+      const diferencia = percentil90Bootstrap - percentil90Original;
+      const diferenciaRelativa = (diferencia / percentil90Original) * 100;
+      
+      const muestraOrdenada = [...muestrasBootstrap[0]].sort((a, b) => a - b);
+      const pos90Bootstrap = Math.floor(0.9 * (muestrasBootstrap[0].length - 1));
+      
+      contenido.innerHTML = `
+        <div class="interactive-demo mb-3">
+          <h6 class="fw-bold mb-2">Muestra Bootstrap Ordenada:</h6>
+          <div class="percentile-visual">
+            ${muestraOrdenada.map((puntuacion, i) => 
+              `<div class="score-item ${clasificarPuntuacion(puntuacion)} ${i >= pos90Bootstrap ? 'percentile-90' : ''}">
+                ${puntuacion.toFixed(0)}
+              </div>`
+            ).join('')}
+          </div>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-2">📊 Percentil 90 Bootstrap #1:</h6>
+          <p class="mb-0">P90 = <span class="stat-highlight">${percentil90Bootstrap.toFixed(1)} pts</span></p>
+        </div>
+        
+        <div class="row">
+          <div class="col-6">
+            <div class="text-center p-2 bg-light rounded">
+              <strong class="text-primary small">${percentil90Original.toFixed(1)} pts</strong>
+              <br><small class="text-muted">Original</small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-2 bg-light rounded">
+              <strong class="text-success small">${percentil90Bootstrap.toFixed(1)} pts</strong>
+              <br><small class="text-muted">Bootstrap</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="distribution-bar mt-3" style="position: relative;">
+          <div class="percentile-marker" style="left: 90%"></div>
+          <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 0.8rem;">
+            Variación en umbral de excelencia
+          </div>
+        </div>
+        
+        <div class="concept-box mt-3">
+          <h6 class="fw-bold mb-2">💡 Variación del Umbral</h6>
+          <p class="mb-1 small">Diferencia absoluta: <strong>${diferencia > 0 ? '+' : ''}${diferencia.toFixed(1)} pts</strong></p>
+          <p class="mb-0 small">Diferencia relativa: <strong>${diferenciaRelativa > 0 ? '+' : ''}${diferenciaRelativa.toFixed(1)}%</strong></p>
+        </div>`;
+      break;
+      
+    case 4:
+      const startTime = Date.now();
+      for(let i = 1; i < 1000; i++) {
+        const muestra = generarMuestraBootstrap();
+        const percentil = calcularPercentil(muestra, 90);
+        percentiles90Bootstrap.push(percentil);
+      }
+      const endTime = Date.now();
+      
+      const minPercentil = Math.min(...percentiles90Bootstrap);
+      const maxPercentil = Math.max(...percentiles90Bootstrap);
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">🔄 1000 Repeticiones</h6>
+          <p class="mb-2 small">Generamos 1000 muestras bootstrap para aproximar la distribución del percentil 90.</p>
+        </div>
+        
+        <div class="row">
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${endTime - startTime}ms</strong>
+              <br><small class="text-muted">Tiempo</small>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${minPercentil.toFixed(1)}</strong>
+              <br><small class="text-muted">Mín</small>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${maxPercentil.toFixed(1)}</strong>
+              <br><small class="text-muted">Máx</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="distribution-bar mt-3" style="background: linear-gradient(90deg, var(--coral), var(--azure), var(--mint), var(--plum)); position: relative;">
+          <div style="position: absolute; left: ${Math.max(0, Math.min(100, ((minPercentil - 50) / 50) * 100))}%; top: 0; bottom: 0; width: 2px; background: white;"></div>
+          <div style="position: absolute; left: ${Math.max(0, Math.min(100, ((maxPercentil - 50) / 50) * 100))}%; top: 0; bottom: 0; width: 2px; background: white;"></div>
+          <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 0.8rem;">
+            Rango de variación del P90
+          </div>
+        </div>
+        
+        <div class="progress mt-3" style="height: 20px;">
+          <div class="progress-bar bg-success" style="width: 100%">
+            ✓ Simulación de Umbrales de Excelencia Completada
+          </div>
+        </div>`;
+      break;
+      
+    case 5:
+      const percentil90BootstrapTotal = percentiles90Bootstrap.reduce((a, b) => a + b, 0) / percentiles90Bootstrap.length;
+      const percentilesOrdenados = [...percentiles90Bootstrap].sort((a, b) => a - b);
+      const q1 = percentilesOrdenados[Math.floor(0.25 * percentilesOrdenados.length)];
+      const mediana = percentilesOrdenados[Math.floor(0.5 * percentilesOrdenados.length)];
+      const q3 = percentilesOrdenados[Math.floor(0.75 * percentilesOrdenados.length)];
+      const errorEstandar = Math.sqrt(percentiles90Bootstrap.reduce((a, b) => a + Math.pow(b - percentil90BootstrapTotal, 2), 0) / percentiles90Bootstrap.length);
+      
+      contenido.innerHTML = `
+        <div class="alert alert-info border-0">
+          <h6 class="fw-bold mb-2">📊 Estadísticas Bootstrap</h6>
+          <div class="row text-center small">
+            <div class="col-6">
+              <strong>${percentil90BootstrapTotal.toFixed(1)} pts</strong>
+              <br><small>Media Bootstrap</small>
+            </div>
+            <div class="col-6">
+              <strong>${errorEstandar.toFixed(2)} pts</strong>
+              <br><small>Error Estándar</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="academic-levels">
+          <div class="academic-level">
+            <div class="range">${q1.toFixed(1)}</div>
+            <div class="label">Q1 (25%)</div>
+            <div class="description">Percentil inferior</div>
+          </div>
+          <div class="academic-level">
+            <div class="range">${mediana.toFixed(1)}</div>
+            <div class="label">Mediana</div>
+            <div class="description">Valor central</div>
+          </div>
+          <div class="academic-level">
+            <div class="range">${q3.toFixed(1)}</div>
+            <div class="label">Q3 (75%)</div>
+            <div class="description">Percentil superior</div>
+          </div>
+        </div>
+        
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">💡 Interpretación Educativa</h6>
+          <p class="mb-0 small">El error estándar (${errorEstandar.toFixed(2)} pts) indica la precisión de nuestra estimación del umbral de excelencia académica.</p>
+        </div>`;
+      break;
+      
+    case 6:
+      percentiles90Bootstrap.sort((a, b) => a - b);
+      const ic95_inf = percentiles90Bootstrap[Math.floor(0.025 * percentiles90Bootstrap.length)];
+      const ic95_sup = percentiles90Bootstrap[Math.floor(0.975 * percentiles90Bootstrap.length)];
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">📈 Intervalo de Confianza 95%</h6>
+          <p class="mb-2 small">Tomamos los percentiles 2.5% y 97.5% de la distribución bootstrap del percentil 90.</p>
+        </div>
+        
+        <div class="alert alert-success border-0 text-center">
+          <h5 class="mb-1">[${ic95_inf.toFixed(1)}, ${ic95_sup.toFixed(1)}] pts</h5>
+          <small>Intervalo de Confianza 95% para el Percentil 90</small>
+        </div>
+        
+        <div class="distribution-bar" style="position: relative; height: 50px;">
+          <div class="percentile-marker" style="left: ${Math.max(0, Math.min(95, ((ic95_inf - 50) / 50) * 100))}%; background: var(--coral);">
+            <div class="percentile-label" style="background: var(--coral);">${ic95_inf.toFixed(1)}</div>
+          </div>
+          <div class="percentile-marker" style="left: ${Math.max(0, Math.min(95, ((percentil90Original - 50) / 50) * 100))}%; background: gold;">
+            <div class="percentile-label">P90</div>
+          </div>
+          <div class="percentile-marker" style="left: ${Math.max(0, Math.min(95, ((ic95_sup - 50) / 50) * 100))}%; background: var(--coral);">
+            <div class="percentile-label" style="background: var(--coral);">${ic95_sup.toFixed(1)}</div>
+          </div>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-2">🎓 Aplicación Educativa</h6>
+          <p class="mb-0 small">Con 95% de confianza, el verdadero umbral de excelencia académica (percentil 90) está entre ${ic95_inf.toFixed(1)} y ${ic95_sup.toFixed(1)} puntos. 
+          Usa este rango para establecer criterios robustos de excelencia académica y programas especiales.</p>
+        </div>`;
+      break;
+  }
+}
+
+// Función para generar muestra bootstrap
+function generarMuestraBootstrap() {
+  const muestra = [];
+  for(let i = 0; i < datos.length; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * datos.length);
+    muestra.push(datos[indiceAleatorio]);
+  }
+  return muestra;
+}
+
+// Función para dibujar histograma
+function dibujarHistograma() {
+  const canvas = document.getElementById('graficoCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  const width = 800;
+  const height = 400;
+  const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+  const chartWidth = width - margin.left - margin.right;
+  const chartHeight = height - margin.top - margin.bottom;
+  
+  ctx.clearRect(0, 0, width, height);
+  
+  // Crear histograma
+  const min = Math.min(...percentiles90Bootstrap);
+  const max = Math.max(...percentiles90Bootstrap);
+  const bins = 25;
+  const binWidth = (max - min) / bins;
+  const histogram = new Array(bins).fill(0);
+  
+  percentiles90Bootstrap.forEach(valor => {
+    const binIndex = Math.min(Math.floor((valor - min) / binWidth), bins - 1);
+    histogram[binIndex]++;
+  });
+  
+  const maxCount = Math.max(...histogram);
+  
+  // Dibujar barras
+  const gradient = ctx.createLinearGradient(0, margin.top, 0, height - margin.bottom);
+  gradient.addColorStop(0, '#89CDF1');
+  gradient.addColorStop(1, '#A855F7');
+  
+  histogram.forEach((count, i) => {
+    const x = margin.left + (i * chartWidth / bins);
+    const barHeight = (count / maxCount) * chartHeight;
+    const y = margin.top + chartHeight - barHeight;
+    const barWidth = chartWidth / bins - 2;
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x + 1, y, barWidth, barHeight);
+  });
+  
+  // Línea de percentil 90 original
+  ctx.strokeStyle = '#F4A6A6';
+  ctx.lineWidth = 3;
+  const percentilX = margin.left + ((percentil90Original - min) / (max - min)) * chartWidth;
+  ctx.beginPath();
+  ctx.moveTo(percentilX, margin.top);
+  ctx.lineTo(percentilX, margin.top + chartHeight);
+  ctx.stroke();
+  
+  // Título
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 18px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Distribución Bootstrap del Percentil 90', width / 2, 25);
+  
+  // Etiquetas de ejes
+  ctx.font = '12px Arial';
+  ctx.fillText('Percentil 90 (Puntos)', width / 2, height - 10);
+  
+  // Etiquetas del eje X
+  const numLabels = 5;
+  for(let i = 0; i <= numLabels; i++) {
+    const value = min + (max - min) * i / numLabels;
+    const x = margin.left + chartWidth * i / numLabels;
+    ctx.fillText(value.toFixed(1), x, height - margin.bottom + 20);
+  }
+}
+
+// Función para reiniciar
+function reiniciar() {
+  pasoActual = 0;
+  muestrasBootstrap = [];
+  percentiles90Bootstrap = [];
+  modoAuto = false;
+  
+  for(let i = 0; i < 7; i++) {
+    document.getElementById(`paso${i}`).classList.remove('paso-activo', 'paso-completado');
+    document.getElementById(`contenido${i}`).style.display = 'none';
+  }
+  
+  document.getElementById('paso0').classList.add('paso-activo');
+  document.getElementById('progreso').style.width = '0%';
+  document.getElementById('pasoActual').textContent = '0';
+  document.getElementById('porcentaje').textContent = '0%';
+  document.getElementById('resultsModal').style.display = 'none';
+  
+  document.getElementById('btnIniciar').disabled = false;
+  document.getElementById('btnSiguiente').disabled = true;
+  document.getElementById('btnAutomatico').disabled = true;
+  document.getElementById('preguntasComprension').style.display = 'none';
+}
+
+// Funciones auxiliares
+function mostrarNotificacion(mensaje, tipo = 'info') {
+  const div = document.createElement('div');
+  div.className = `alert alert-${tipo} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
+  div.style.zIndex = '9999';
+  div.innerHTML = `
+    ${mensaje}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
+  document.body.appendChild(div);
+  
+  setTimeout(() => {
+    div.remove();
+  }, 3000);
+}
+
+function mostrarRespuesta(num) {
+  const respuesta = document.getElementById(`respuesta${num}`);
+  respuesta.style.display = respuesta.style.display === 'none' ? 'block' : 'none';
+}
+
+function descargarResultados() {
+  const ic95_inf = percentiles90Bootstrap[Math.floor(0.025 * percentiles90Bootstrap.length)];
+  const ic95_sup = percentiles90Bootstrap[Math.floor(0.975 * percentiles90Bootstrap.length)];
+  const errorEstandar = Math.sqrt(percentiles90Bootstrap.reduce((a, b) => a + Math.pow(b - (percentiles90Bootstrap.reduce((c, d) => c + d, 0) / percentiles90Bootstrap.length), 2), 0) / percentiles90Bootstrap.length);
+  
+  const contenido = `
+Resultados del Bootstrap - Análisis del Percentil 90 en Evaluación Académica
+==========================================================================
+Fecha: ${new Date().toLocaleString()}
+
+Datos originales: [${datos.join(', ')}]
+Tamaño de muestra: ${datos.length} estudiantes
+Media: ${mediaOriginal.toFixed(1)} puntos
+Percentil 90 muestral: ${percentil90Original.toFixed(1)} puntos
+
+Resultados Bootstrap (1000 iteraciones):
+- Percentil 90 bootstrap: ${(percentiles90Bootstrap.reduce((a, b) => a + b, 0) / percentiles90Bootstrap.length).toFixed(1)} puntos
+- Error estándar: ${errorEstandar.toFixed(2)} puntos
+- IC 95%: [${ic95_inf.toFixed(1)}, ${ic95_sup.toFixed(1)}] puntos
+
+Distribución de Calificaciones:
+- Insuficiente (0-59): ${datos.filter(x => x < 60).length} estudiantes (${((datos.filter(x => x < 60).length / datos.length) * 100).toFixed(1)}%)
+- Suficiente (60-69): ${datos.filter(x => x >= 60 && x < 70).length} estudiantes (${((datos.filter(x => x >= 60 && x < 70).length / datos.length) * 100).toFixed(1)}%)
+- Notable (70-84): ${datos.filter(x => x >= 70 && x < 85).length} estudiantes (${((datos.filter(x => x >= 70 && x < 85).length / datos.length) * 100).toFixed(1)}%)
+- Sobresaliente (85-100): ${datos.filter(x => x >= 85).length} estudiantes (${((datos.filter(x => x >= 85).length / datos.length) * 100).toFixed(1)}%)
+
+Análisis de Excelencia Académica:
+- Umbral de excelencia (P90): ${percentil90Original.toFixed(1)} puntos
+- Estudiantes en el 10% superior: ${datos.filter(x => x >= percentil90Original).length}
+- Nivel de exigencia: ${percentil90Original >= 95 ? 'Muy alto' : percentil90Original >= 90 ? 'Alto' : percentil90Original >= 85 ? 'Moderado' : 'Bajo'}
+
+Aplicaciones Educativas:
+1. Criterios de admisión a programas de honor
+2. Asignación de becas académicas por mérito
+3. Identificación de talentos excepcionales
+4. Establecimiento de metas de rendimiento
+5. Evaluación comparativa institucional
+
+Interpretación del Intervalo de Confianza:
+Si repitiéramos esta evaluación académica muchas veces con diferentes grupos de estudiantes
+del mismo nivel, el 95% de los intervalos calculados contendrían el verdadero percentil 90
+de la población estudiantil.
+
+Recomendaciones:
+${percentil90Original >= 95 ? 'Considerar programas especiales para talentos excepcionales' :
+  percentil90Original >= 90 ? 'Umbral apropiado para programas de excelencia académica' :
+  percentil90Original >= 85 ? 'Revisar si el estándar es suficientemente desafiante' :
+  'Implementar estrategias de mejora académica general'}
+  `;
+  
+  const blob = new Blob([contenido], { type: 'text/plain' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'resultados_bootstrap_percentil90_academico.txt';
+  a.click();
+  window.URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('📥 Resultados del análisis académico descargados', 'success');
+}
+
+function compartirResultados() {
+  const ic95_inf = percentiles90Bootstrap[Math.floor(0.025 * percentiles90Bootstrap.length)];
+  const ic95_sup = percentiles90Bootstrap[Math.floor(0.975 * percentiles90Bootstrap.length)];
+  
+  const texto = `🎓 Bootstrap Percentil 90: ${percentil90Original.toFixed(1)} puntos (umbral excelencia), IC95% [${ic95_inf.toFixed(1)}, ${ic95_sup.toFixed(1)}] puntos`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Resultados Bootstrap - Excelencia Académica',
+      text: texto
+    });
+  } else {
+    navigator.clipboard.writeText(texto);
+    mostrarNotificacion('📋 Copiado al portapapeles', 'info');
+  }
+}
+
+// Inicializar
+window.onload = function() {
+  calcularEstadisticos();
+};
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('resultsModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    cerrarResultados();
+  }
+});
+</script>
+
+</body>
+</html>

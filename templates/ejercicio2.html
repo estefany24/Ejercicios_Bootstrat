@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 2 - Bootstrap para la Mediana</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --azure: #89CDF1;
+      --mint: #7ED4AD;
+      --coral: #F4A6A6;
+      --pink: #F48FB1;
+      --plum: #A855F7;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Header elegante */
+    .hero-section {
+      background: linear-gradient(135deg, var(--azure) 0%, var(--plum) 100%);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Layout principal de 2 columnas */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      align-items: start;
+    }
+
+    /* Columna izquierda - Controles */
+    .left-column {
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+    }
+
+    /* Columna derecha - Contenido principal */
+    .right-column {
+      min-height: 100vh;
+    }
+
+    .right-column .main-card {
+      height: fit-content;
+    }
+
+    /* Cards principales */
+    .main-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: none;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .main-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .card-header-custom {
+      padding: 1.5rem;
+      border: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      position: relative;
+    }
+
+    .header-teoria {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+      color: white;
+    }
+
+    .header-datos {
+      background: linear-gradient(135deg, var(--mint), var(--coral));
+      color: white;
+    }
+
+    .header-controles {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+    }
+
+    .header-proceso {
+      background: linear-gradient(135deg, var(--pink), var(--plum));
+      color: white;
+    }
+
+    .header-resultados {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+      color: white;
+    }
+
+    /* Estadísticas circulares mejoradas */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-circle::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.05) rotate(180deg); }
+    }
+
+    .stat-1 { background: linear-gradient(135deg, var(--azure), var(--mint)); }
+    .stat-2 { background: linear-gradient(135deg, var(--mint), var(--coral)); }
+    .stat-3 { background: linear-gradient(135deg, var(--coral), var(--pink)); }
+
+    .stat-value {
+      font-size: 1.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    /* Botones mejorados */
+    .btn-custom {
+      border-radius: 25px;
+      font-weight: 600;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-custom::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-iniciar {
+      background: linear-gradient(135deg, var(--mint), var(--azure));
+      color: white;
+      animation: btn-pulse 2s infinite;
+    }
+
+    .btn-siguiente {
+      background: linear-gradient(135deg, var(--azure), var(--plum));
+      color: white;
+    }
+
+    .btn-automatico {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+    }
+
+    .btn-reiniciar {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+    }
+
+    @keyframes btn-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+      50% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    }
+
+    /* Progreso personalizado */
+    .progress-custom {
+      height: 25px;
+      background: linear-gradient(90deg, #f1f3f4, #e8eaed);
+      border-radius: 25px;
+      overflow: hidden;
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .progress-bar-custom {
+      height: 100%;
+      background: linear-gradient(90deg, var(--azure), var(--mint), var(--coral), var(--pink), var(--plum));
+      border-radius: 25px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-custom::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Pasos del proceso - Scroll vertical */
+    .pasos-container {
+      height: auto;
+      max-height: none;
+      overflow-y: visible;
+      padding-right: 0.5rem;
+    }
+
+    .pasos-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .pasos-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .pasos-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, var(--azure), var(--plum));
+      border-radius: 10px;
+    }
+
+    .pasos-container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+    }
+
+    .paso-card {
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .paso-activo {
+      border-color: var(--azure);
+      box-shadow: 0 0 20px rgba(137, 205, 241, 0.3);
+      transform: scale(1.01);
+    }
+
+    .paso-completado {
+      border-color: var(--mint);
+      background: linear-gradient(145deg, #f0fff4, #e6fffa);
+      opacity: 0.9;
+    }
+
+    .paso-header {
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-bottom: 1px solid #dee2e6;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .paso-activo .paso-header {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+      color: white;
+    }
+
+    .paso-completado .paso-header {
+      background: linear-gradient(135deg, var(--mint), var(--coral));
+      color: white;
+    }
+
+    .paso-content {
+      padding: 1.5rem;
+      min-height: auto;
+    }
+
+    /* Cajas de contenido */
+    .concept-box {
+      background: linear-gradient(145deg, #f0f7ff, #e6f3ff);
+      border-left: 5px solid var(--azure);
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 15px 15px 0;
+      position: relative;
+    }
+
+    .concept-box::before {
+      content: '💡';
+      position: absolute;
+      top: -8px;
+      left: -12px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .example-box {
+      background: linear-gradient(145deg, #fff8e1, #fff3c4);
+      border-left: 5px solid var(--coral);
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 15px 15px 0;
+      position: relative;
+    }
+
+    .example-box::before {
+      content: '💼';
+      position: absolute;
+      top: -8px;
+      left: -12px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .formula-box {
+      background: linear-gradient(145deg, #f1f8e9, #e8f5e9);
+      border: 3px dashed var(--mint);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 15px;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      position: relative;
+    }
+
+    .formula-box::before {
+      content: '📐';
+      position: absolute;
+      top: -12px;
+      left: 15px;
+      background: white;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .interactive-demo {
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      border: 2px solid #e9ecef;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Highlights y badges */
+    .stat-highlight {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-block;
+      box-shadow: 0 2px 10px rgba(244, 166, 166, 0.3);
+    }
+
+    .badge-custom {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Modal para resultados */
+    .results-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1050;
+      padding: 2rem;
+    }
+
+    .results-content {
+      background: white;
+      border-radius: 20px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #666;
+      z-index: 1;
+    }
+
+    /* Canvas mejorado */
+    #graficoCanvas {
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      background: white;
+      max-width: 100%;
+    }
+
+    .salary-box {
+      background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+      border: 2px solid var(--azure);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: inline-block;
+      margin: 2px;
+      font-weight: 600;
+      color: var(--azure);
+      font-size: 0.85rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .salary-box.highlighted {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+      color: white;
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .left-column {
+        position: relative;
+        top: 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .stat-circle {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .stat-value {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 2rem 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .btn-custom {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .main-layout {
+        padding: 0 0.5rem;
+      }
+    }
+
+    /* Animaciones de entrada */
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Volver button */
+    .btn-volver {
+      background: linear-gradient(135deg, #6c757d, #495057);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.6rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-bottom: 2rem;
+    }
+
+    .btn-volver:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      color: white;
+    }
+
+    /* Tooltip mejorado */
+    .tooltip-custom {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      color: var(--plum);
+      text-decoration: underline dotted;
+      font-weight: 600;
+    }
+
+    .tooltip-custom:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      z-index: 1000;
+      font-size: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .tooltip-custom:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 115%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #333;
+      z-index: 1000;
+    }
+
+    .salary-formatter {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header Hero -->
+<div class="hero-section">
+  <div class="container">
+    <div class="hero-content text-center">
+      <h1 class="display-4 fw-bold mb-3">
+        <i class="bi bi-cash-stack"></i> Bootstrap para la Mediana
+      </h1>
+      <p class="lead mb-4">Estima el salario mediano del sector usando el método Bootstrap</p>
+      <div class="badge-custom">
+        <i class="bi bi-briefcase-fill"></i> Ejercicio Interactivo • Nivel Intermedio • 10-15 min
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <!-- Navegación -->
+  <div class="mb-4 text-center">
+    <a href="/" class="btn btn-volver">
+      <i class="bi bi-arrow-left"></i> Volver a Ejercicios
+    </a>
+  </div>
+
+  <!-- Layout principal de 2 columnas -->
+  <div class="main-layout">
+    
+    <!-- COLUMNA IZQUIERDA - CONTROLES -->
+    <div class="left-column">
+      
+      <!-- 1. TEORÍA FUNDAMENTAL -->
+      <div class="main-card">
+        <div class="card-header-custom header-teoria">
+          <i class="bi bi-book-fill me-2"></i>
+          Mediana vs Media en Salarios
+        </div>
+        <div class="p-3">
+          <div class="concept-box">
+            <h6 class="fw-bold mb-2">¿Por qué la Mediana?</h6>
+            <p class="mb-2 small">La <strong>mediana</strong> es más robusta ante <span class="tooltip-custom" data-tooltip="Valores extremadamente altos o bajos que distorsionan la media">valores atípicos</span> que la media, especialmente en datos de salarios.</p>
+          </div>
+          
+          <div class="example-box">
+            <h6 class="fw-bold mb-2">Contexto Empresarial</h6>
+            <p class="mb-0 small">Una empresa necesita conocer el salario mediano del sector para planificar su política salarial.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. CONFIGURACIÓN DE DATOS -->
+      <div class="main-card">
+        <div class="card-header-custom header-datos">
+          <i class="bi bi-currency-dollar me-2"></i>
+          Datos de Salarios
+        </div>
+        <div class="p-3">
+          <div class="interactive-demo">
+            <label class="form-label fw-bold mb-2 small">
+              <i class="bi bi-cash-stack"></i> Salarios (€):
+            </label>
+            <input type="text" id="datosInput" class="form-control mb-3" 
+                   value="25000, 30000, 32000, 28000, 35000, 31000, 85000, 29000, 33000, 30000">
+            <div class="d-grid gap-2">
+              <button onclick="actualizarDatos()" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+              </button>
+              <button onclick="generarDatosAleatorios()" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-dice-3-fill"></i> Aleatorios
+              </button>
+            </div>
+          </div>
+          
+          <div class="stats-grid">
+            <div class="text-center">
+              <div class="stat-circle stat-1">
+                <div class="stat-value" id="tamanoMuestra">10</div>
+                <div class="stat-label">Empleados</div>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="stat-circle stat-2">
+                <div class="stat-value salary-formatter" id="medianaOriginal">30500</div>
+                <div class="stat-label">Mediana</div>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="stat-circle stat-3">
+                <div class="stat-value salary-formatter" id="mediaOriginal">35800</div>
+                <div class="stat-label">Media</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. CONTROLES DE SIMULACIÓN -->
+      <div class="main-card">
+        <div class="card-header-custom header-controles">
+          <i class="bi bi-controller me-2"></i>
+          Controles de Simulación
+        </div>
+        <div class="p-3">
+          <div class="d-grid gap-2">
+            <button id="btnIniciar" onclick="iniciarProceso()" class="btn-custom btn-iniciar">
+              <i class="bi bi-play-fill"></i> Iniciar Simulación
+            </button>
+            <button id="btnSiguiente" onclick="siguientePaso()" class="btn-custom btn-siguiente" disabled>
+              <i class="bi bi-skip-forward-fill"></i> Siguiente Paso
+            </button>
+            <button id="btnAutomatico" onclick="modoAutomatico()" class="btn-custom btn-automatico" disabled>
+              <i class="bi bi-lightning-fill"></i> Modo Automático
+            </button>
+            <button id="btnReiniciar" onclick="reiniciar()" class="btn-custom btn-reiniciar">
+              <i class="bi bi-arrow-clockwise"></i> Reiniciar
+            </button>
+          </div>
+          
+          <div class="progress-custom">
+            <div id="progreso" class="progress-bar-custom" style="width: 0%"></div>
+          </div>
+          <div class="text-center">
+            <small class="text-muted fw-bold">
+              Paso <span id="pasoActual">0</span> de 7 • 
+              <span id="porcentaje">0%</span>
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PREGUNTAS DE COMPRENSIÓN -->
+      <div class="main-card">
+                  <div class="card-header-custom" style="background: linear-gradient(135deg, var(--plum), var(--coral)); color: white;">
+          <i class="bi bi-question-circle-fill me-2"></i>
+          Verificación de Aprendizaje
+        </div>
+        <div class="p-3">
+          <div id="preguntasComprension" style="display:none;">
+            <div class="mb-3">
+              <h6 class="small fw-bold">1. ¿Por qué usar mediana en salarios?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(1)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta1" class="alert alert-info mt-2 small" style="display:none;">
+                Porque es menos sensible a salarios extremos (outliers).
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="small fw-bold">2. ¿Cómo se calcula la mediana?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(2)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta2" class="alert alert-info mt-2 small" style="display:none;">
+                Ordenamos los datos y tomamos el valor central (o promedio de los dos centrales).
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="small fw-bold">3. ¿Ventaja del Bootstrap aquí?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(3)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta3" class="alert alert-info mt-2 small" style="display:none;">
+                Estima la incertidumbre de la mediana sin asumir distribución normal.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA - PROCESO PASO A PASO -->
+    <div class="right-column">
+      <div class="main-card">
+        <div class="card-header-custom header-proceso">
+          <i class="bi bi-list-check me-2"></i>
+          Proceso Bootstrap para la Mediana
+        </div>
+        <div class="pasos-container p-3">
+          
+          <!-- Paso 0: Conceptos Fundamentales -->
+          <div id="paso0" class="paso-card paso-activo">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-rocket-takeoff-fill me-2"></i>
+                Paso 0: Conceptos Fundamentales
+              </h5>
+            </div>
+            <div id="contenido0" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 1: Estadístico Original -->
+          <div id="paso1" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calculator-fill me-2"></i>
+                Paso 1: Calcular la Mediana Original
+              </h5>
+            </div>
+            <div id="contenido1" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 2: Primera Muestra Bootstrap -->
+          <div id="paso2" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-shuffle me-2"></i>
+                Paso 2: Generar Primera Muestra Bootstrap
+              </h5>
+            </div>
+            <div id="contenido2" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 3: Calcular Mediana Bootstrap -->
+          <div id="paso3" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calculator me-2"></i>
+                Paso 3: Calcular Mediana Bootstrap
+              </h5>
+            </div>
+            <div id="contenido3" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 4: Repetir Proceso -->
+          <div id="paso4" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-arrow-repeat me-2"></i>
+                Paso 4: Repetir el Proceso (1000 veces)
+              </h5>
+            </div>
+            <div id="contenido4" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 5: Analizar Distribución -->
+          <div id="paso5" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-bar-chart-fill me-2"></i>
+                Paso 5: Analizar la Distribución Bootstrap
+              </h5>
+            </div>
+            <div id="contenido5" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 6: Intervalos de Confianza -->
+          <div id="paso6" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-graph-up-arrow me-2"></i>
+                Paso 6: Calcular Intervalos de Confianza
+              </h5>
+            </div>
+            <div id="contenido6" class="paso-content" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Resultados -->
+<div id="resultsModal" class="results-modal">
+  <div class="results-content">
+    <button class="modal-close" onclick="cerrarResultados()">&times;</button>
+    <div class="main-card m-0">
+      <div class="card-header-custom header-resultados">
+        <i class="bi bi-trophy-fill me-2"></i>
+        Resultados Finales del Bootstrap
+      </div>
+      <div class="p-4">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="p-4 bg-light rounded-3 h-100">
+              <h5 class="mb-3">
+                <i class="bi bi-clipboard-data-fill text-primary me-2"></i>
+                Resumen de Resultados
+              </h5>
+              <table class="table table-borderless">
+                <tr>
+                  <td class="fw-bold">Tamaño de muestra:</td>
+                  <td><span class="badge-custom" id="resultTamano"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Mediana muestral original:</td>
+                  <td><span class="stat-highlight" id="resultMediana"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Mediana bootstrap:</td>
+                  <td><span class="stat-highlight" id="resultMedianaBootstrap"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Intervalo de Confianza 95%:</td>
+                  <td><span class="stat-highlight" id="resultIC"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="p-4 bg-info bg-opacity-10 rounded-3 h-100">
+              <h5 class="mb-3">
+                <i class="bi bi-lightbulb-fill text-info me-2"></i>
+                Interpretación
+              </h5>
+              <p id="interpretacionResultados" class="mb-3"></p>
+              <div class="alert alert-success border-0">
+                <h6 class="alert-heading">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Recomendación Empresarial
+                </h6>
+                <p id="conclusionFinal" class="mb-0"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <h5 class="mb-3">
+            <i class="bi bi-graph-up text-primary me-2"></i>
+            Distribución Bootstrap de la Mediana
+          </h5>
+          <div class="text-center">
+            <canvas id="graficoCanvas" width="800" height="400"></canvas>
+          </div>
+        </div>
+        
+        <div class="mt-4 text-center">
+          <button onclick="descargarResultados()" class="btn btn-custom btn-siguiente me-2" style="width: auto;">
+            <i class="bi bi-download"></i> Descargar Resultados
+          </button>
+          <button onclick="compartirResultados()" class="btn btn-custom btn-automatico" style="width: auto;">
+            <i class="bi bi-share-fill"></i> Compartir Resultados
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Variables globales
+let datos = [25000, 30000, 32000, 28000, 35000, 31000, 85000, 29000, 33000, 30000];
+let pasoActual = 0;
+let medianaOriginal = 0;
+let mediaOriginal = 0;
+let muestrasBootstrap = [];
+let medianasBootstrap = [];
+let modoAuto = false;
+
+// Función para calcular la mediana
+function calcularMediana(arr) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const n = sorted.length;
+  if (n % 2 === 0) {
+    return (sorted[n/2 - 1] + sorted[n/2]) / 2;
+  } else {
+    return sorted[Math.floor(n/2)];
+  }
+}
+
+// Función para formatear salarios
+function formatearSalario(valor) {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(valor);
+}
+
+// Función para actualizar datos
+function actualizarDatos() {
+  const input = document.getElementById('datosInput').value;
+  try {
+    datos = input.split(',').map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
+    if (datos.length < 3) throw new Error('Necesitas al menos 3 valores');
+    
+    calcularEstadisticos();
+    reiniciar();
+    
+    mostrarNotificacion('✅ Datos de salarios actualizados correctamente', 'success');
+    
+  } catch (e) {
+    mostrarNotificacion('❌ Error: Ingresa salarios válidos separados por comas', 'danger');
+  }
+}
+
+// Función para generar datos aleatorios de salarios
+function generarDatosAleatorios() {
+  const n = Math.floor(Math.random() * 12) + 8;
+  const salarioBase = 25000 + Math.random() * 15000;
+  
+  datos = [];
+  for(let i = 0; i < n; i++) {
+    let salario;
+    if (Math.random() < 0.8) {
+      // 80% salarios normales
+      salario = salarioBase + (Math.random() - 0.5) * 15000;
+    } else {
+      // 20% salarios atípicos (más altos)
+      salario = salarioBase + 40000 + Math.random() * 50000;
+    }
+    datos.push(Math.round(salario / 1000) * 1000); // Redondear a miles
+  }
+  
+  document.getElementById('datosInput').value = datos.join(', ');
+  calcularEstadisticos();
+  reiniciar();
+  mostrarNotificacion('🎲 Datos de salarios aleatorios generados', 'info');
+}
+
+// Función para calcular estadísticos
+function calcularEstadisticos() {
+  medianaOriginal = calcularMediana(datos);
+  mediaOriginal = datos.reduce((a, b) => a + b, 0) / datos.length;
+  
+  document.getElementById('tamanoMuestra').textContent = datos.length;
+  document.getElementById('medianaOriginal').textContent = Math.round(medianaOriginal);
+  document.getElementById('mediaOriginal').textContent = Math.round(mediaOriginal);
+}
+
+// Función para iniciar el proceso
+function iniciarProceso() {
+  calcularEstadisticos();
+  pasoActual = 0;
+  document.getElementById('btnIniciar').disabled = true;
+  document.getElementById('btnSiguiente').disabled = false;
+  document.getElementById('btnAutomatico').disabled = false;
+  document.getElementById('preguntasComprension').style.display = 'block';
+  siguientePaso();
+}
+
+// Función para modo automático
+function modoAutomatico() {
+  modoAuto = true;
+  document.getElementById('btnAutomatico').disabled = true;
+  document.getElementById('btnSiguiente').disabled = true;
+  
+  function avanzarAutomatico() {
+    if (pasoActual < 7 && modoAuto) {
+      siguientePaso();
+      setTimeout(avanzarAutomatico, 2500);
+    }
+  }
+  avanzarAutomatico();
+}
+
+// Función principal para avanzar pasos
+function siguientePaso() {
+  if (pasoActual > 0) {
+    document.getElementById(`paso${pasoActual-1}`).classList.remove('paso-activo');
+    document.getElementById(`paso${pasoActual-1}`).classList.add('paso-completado');
+  }
+  
+  if (pasoActual < 7) {
+    document.getElementById(`paso${pasoActual}`).classList.add('paso-activo');
+    const contenido = document.getElementById(`contenido${pasoActual}`);
+    contenido.style.display = 'block';
+    contenido.classList.add('fade-in');
+    
+    // Scroll al paso activo
+    document.getElementById(`paso${pasoActual}`).scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'center' 
+    });
+    
+    ejecutarPaso(pasoActual);
+    pasoActual++;
+    
+    // Actualizar progreso
+    const progreso = (pasoActual / 7) * 100;
+    document.getElementById('progreso').style.width = progreso + '%';
+    document.getElementById('pasoActual').textContent = pasoActual;
+    document.getElementById('porcentaje').textContent = Math.round(progreso) + '%';
+    
+    if (pasoActual >= 7) {
+      document.getElementById('btnSiguiente').disabled = true;
+      document.getElementById('btnAutomatico').disabled = true;
+      mostrarResultados();
+    }
+  }
+}
+
+// Función para mostrar resultados en modal
+function mostrarResultados() {
+  const medianaBootstrapFinal = calcularMediana(medianasBootstrap);
+  medianasBootstrap.sort((a, b) => a - b);
+  const ic95_inf = medianasBootstrap[Math.floor(0.025 * medianasBootstrap.length)];
+  const ic95_sup = medianasBootstrap[Math.floor(0.975 * medianasBootstrap.length)];
+  
+  document.getElementById('resultTamano').textContent = datos.length + ' empleados';
+  document.getElementById('resultMediana').textContent = formatearSalario(medianaOriginal);
+  document.getElementById('resultMedianaBootstrap').textContent = formatearSalario(medianaBootstrapFinal);
+  document.getElementById('resultIC').textContent = `[${formatearSalario(ic95_inf)}, ${formatearSalario(ic95_sup)}]`;
+  
+  // Interpretación
+  const amplitudIC = ic95_sup - ic95_inf;
+  const precision = amplitudIC < 5000 ? "muy precisa" : amplitudIC < 10000 ? "moderadamente precisa" : "poco precisa";
+  
+  document.getElementById('interpretacionResultados').innerHTML = `
+    La distribución bootstrap muestra que nuestra estimación de la mediana salarial es <strong>${precision}</strong> 
+    con una amplitud de ${formatearSalario(amplitudIC)} en el intervalo de confianza.
+  `;
+  
+  document.getElementById('conclusionFinal').innerHTML = `
+    Para la política salarial, podemos estar 95% seguros de que el salario mediano del sector 
+    está entre <strong>${formatearSalario(ic95_inf)}</strong> y <strong>${formatearSalario(ic95_sup)}</strong>.
+  `;
+  
+  document.getElementById('resultsModal').style.display = 'flex';
+  dibujarHistograma();
+}
+
+function cerrarResultados() {
+  document.getElementById('resultsModal').style.display = 'none';
+}
+
+// Función para ejecutar cada paso
+function ejecutarPaso(paso) {
+  const contenido = document.getElementById(`contenido${paso}`);
+  
+  switch(paso) {
+    case 0:
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-3">🎯 Objetivo del Ejercicio</h6>
+          <p class="mb-3">Una empresa quiere estimar el <strong>salario mediano del sector</strong> usando 
+          datos de <strong>${datos.length} empleados</strong> para establecer su política salarial competitiva.</p>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-3">📊 Cálculo de la Mediana</h6>
+          <div style="font-size: 1.1em; margin: 1rem 0;">
+            <strong>1. Ordenar datos</strong><br>
+            <strong>2. Tomar valor central</strong>
+          </div>
+          <p class="mb-0 small">Si n es par: promedio de los dos valores centrales</p>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-3">💼 ¿Por qué Mediana vs Media?</h6>
+          <p class="mb-3">En salarios, la mediana de <span class="stat-highlight">${formatearSalario(medianaOriginal)}</span> 
+          vs la media de <span class="stat-highlight">${formatearSalario(mediaOriginal)}</span> muestra:</p>
+          <ul class="mb-3 small">
+            <li>La mediana es menos afectada por salarios extremos</li>
+            <li>Representa mejor el "salario típico"</li>
+            <li>Más relevante para decisiones empresariales</li>
+          </ul>
+          <div class="alert alert-info border-0 mb-0 small">
+            <strong>👉 El Bootstrap</strong> nos dará la incertidumbre de esta estimación.
+          </div>
+        </div>`;
+      break;
+      
+    case 1:
+      const datosOrdenados = [...datos].sort((a, b) => a - b);
+      const posicionMediana = datos.length % 2 === 0 ? 
+        `(${datos.length/2}) y (${datos.length/2 + 1})` : 
+        `(${Math.ceil(datos.length/2)})`;
+      
+      contenido.innerHTML = `
+        <div class="alert alert-primary border-0 mb-3">
+          <h6 class="fw-bold mb-2"><i class="bi bi-cash-stack me-2"></i>Salarios Originales</h6>
+          <div class="d-flex flex-wrap gap-1 mb-2">
+            ${datos.slice(0, 10).map(d => `<span class="salary-box">${formatearSalario(d)}</span>`).join('')}
+            ${datos.length > 10 ? '<span class="badge bg-secondary small">...</span>' : ''}
+          </div>
+          <p class="mb-0 small"><strong>n = ${datos.length} empleados</strong></p>
+        </div>
+        
+        <div class="interactive-demo">
+          <h6 class="fw-bold mb-2">Datos Ordenados:</h6>
+          <div class="d-flex flex-wrap gap-1 mb-2">
+            ${datosOrdenados.map((d, i) => {
+              const esMediana = datos.length % 2 === 0 ? 
+                (i === datos.length/2 - 1 || i === datos.length/2) :
+                (i === Math.floor(datos.length/2));
+              return `<span class="salary-box ${esMediana ? 'highlighted' : ''}">${formatearSalario(d)}</span>`;
+            }).join('')}
+          </div>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-2">Cálculo de la Mediana:</h6>
+          <p class="mb-1 small">Posición: ${posicionMediana}</p>
+          <p class="mb-0">Mediana = <span class="stat-highlight">${formatearSalario(medianaOriginal)}</span></p>
+        </div>`;
+      break;
+      
+    case 2:
+      const muestraBootstrap = generarMuestraBootstrap();
+      muestrasBootstrap.push(muestraBootstrap);
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">🎲 Muestreo con Reemplazo</h6>
+          <p class="mb-2 small">Seleccionamos ${datos.length} salarios al azar de nuestros datos originales, <strong>con reemplazo</strong>.</p>
+        </div>
+        
+        <div class="interactive-demo">
+          <h6 class="fw-bold mb-2">Primera Muestra Bootstrap:</h6>
+          <div class="d-flex flex-wrap gap-1">
+            ${muestraBootstrap.map(val => 
+              `<span class="salary-box">${formatearSalario(val)}</span>`
+            ).join('')}
+          </div>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-2">🔍 Observaciones</h6>
+          <p class="mb-0 small">Algunos salarios pueden repetirse. Esto simula la variabilidad natural del muestreo empresarial.</p>
+        </div>`;
+      break;
+      
+    case 3:
+      const medianaBootstrap = calcularMediana(muestrasBootstrap[0]);
+      medianasBootstrap.push(medianaBootstrap);
+      const diferencia = medianaBootstrap - medianaOriginal;
+      
+      const muestraOrdenada = [...muestrasBootstrap[0]].sort((a, b) => a - b);
+      
+      contenido.innerHTML = `
+        <div class="interactive-demo mb-3">
+          <h6 class="fw-bold mb-2">Muestra Bootstrap Ordenada:</h6>
+          <div class="d-flex flex-wrap gap-1">
+            ${muestraOrdenada.map((d, i) => {
+              const esMediana = muestrasBootstrap[0].length % 2 === 0 ? 
+                (i === muestrasBootstrap[0].length/2 - 1 || i === muestrasBootstrap[0].length/2) :
+                (i === Math.floor(muestrasBootstrap[0].length/2));
+              return `<span class="salary-box ${esMediana ? 'highlighted' : ''}">${formatearSalario(d)}</span>`;
+            }).join('')}
+          </div>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-2">📊 Mediana Bootstrap #1:</h6>
+          <p class="mb-0">Mediana = <span class="stat-highlight">${formatearSalario(medianaBootstrap)}</span></p>
+        </div>
+        
+        <div class="row">
+          <div class="col-6">
+            <div class="text-center p-2 bg-light rounded">
+              <strong class="text-primary small">${formatearSalario(medianaOriginal)}</strong>
+              <br><small class="text-muted">Original</small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-2 bg-light rounded">
+              <strong class="text-success small">${formatearSalario(medianaBootstrap)}</strong>
+              <br><small class="text-muted">Bootstrap</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="concept-box mt-3">
+          <h6 class="fw-bold mb-2">💡 Variación Salarial</h6>
+          <p class="mb-0 small">Diferencia: <strong>${diferencia > 0 ? '+' : ''}${formatearSalario(diferencia)}</strong></p>
+        </div>`;
+      break;
+      
+    case 4:
+      const startTime = Date.now();
+      for(let i = 1; i < 1000; i++) {
+        const muestra = generarMuestraBootstrap();
+        const mediana = calcularMediana(muestra);
+        medianasBootstrap.push(mediana);
+      }
+      const endTime = Date.now();
+      
+      const minMediana = Math.min(...medianasBootstrap);
+      const maxMediana = Math.max(...medianasBootstrap);
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">🔄 1000 Repeticiones</h6>
+          <p class="mb-2 small">Generamos 1000 muestras bootstrap para aproximar la distribución de la mediana salarial.</p>
+        </div>
+        
+        <div class="row">
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${endTime - startTime}ms</strong>
+              <br><small class="text-muted">Tiempo</small>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${Math.round(minMediana/1000)}k</strong>
+              <br><small class="text-muted">Mín</small>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${Math.round(maxMediana/1000)}k</strong>
+              <br><small class="text-muted">Máx</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="progress mt-3" style="height: 20px;">
+          <div class="progress-bar bg-success" style="width: 100%">
+            ✓ Simulación Completada
+          </div>
+        </div>`;
+      break;
+      
+    case 5:
+      const medianaBootstrapTotal = calcularMediana(medianasBootstrap);
+      const q1 = medianasBootstrap[Math.floor(0.25 * medianasBootstrap.length)];
+      const q3 = medianasBootstrap[Math.floor(0.75 * medianasBootstrap.length)];
+      const iqr = q3 - q1;
+      
+      contenido.innerHTML = `
+        <div class="alert alert-info border-0">
+          <h6 class="fw-bold mb-2">📊 Estadísticas Bootstrap</h6>
+          <div class="row text-center small">
+            <div class="col-6">
+              <strong>${formatearSalario(medianaBootstrapTotal)}</strong>
+              <br><small>Mediana Bootstrap</small>
+            </div>
+            <div class="col-6">
+              <strong>${formatearSalario(iqr)}</strong>
+              <br><small>Rango Intercuartil</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">💡 Interpretación Empresarial</h6>
+          <p class="mb-0 small">El rango intercuartil (${formatearSalario(iqr)}) nos indica la variabilidad esperada en la mediana salarial del sector.</p>
+        </div>`;
+      break;
+      
+    case 6:
+      medianasBootstrap.sort((a, b) => a - b);
+      const ic95_inf = medianasBootstrap[Math.floor(0.025 * medianasBootstrap.length)];
+      const ic95_sup = medianasBootstrap[Math.floor(0.975 * medianasBootstrap.length)];
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">📈 Intervalo de Confianza 95%</h6>
+          <p class="mb-2 small">Tomamos los percentiles 2.5% y 97.5% de la distribución bootstrap de medianas.</p>
+        </div>
+        
+        <div class="alert alert-success border-0 text-center">
+          <h5 class="mb-1">[${formatearSalario(ic95_inf)}, ${formatearSalario(ic95_sup)}]</h5>
+          <small>Intervalo de Confianza 95% para la Mediana Salarial</small>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-2">💼 Recomendación Empresarial</h6>
+          <p class="mb-0 small">Con 95% de confianza, el salario mediano del sector está entre ${formatearSalario(ic95_inf)} y ${formatearSalario(ic95_sup)}. 
+          Considera este rango para tu política salarial competitiva.</p>
+        </div>`;
+      break;
+  }
+}
+
+// Función para generar muestra bootstrap
+function generarMuestraBootstrap() {
+  const muestra = [];
+  for(let i = 0; i < datos.length; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * datos.length);
+    muestra.push(datos[indiceAleatorio]);
+  }
+  return muestra;
+}
+
+// Función para dibujar histograma
+function dibujarHistograma() {
+  const canvas = document.getElementById('graficoCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  const width = 800;
+  const height = 400;
+  const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+  const chartWidth = width - margin.left - margin.right;
+  const chartHeight = height - margin.top - margin.bottom;
+  
+  ctx.clearRect(0, 0, width, height);
+  
+  // Crear histograma
+  const min = Math.min(...medianasBootstrap);
+  const max = Math.max(...medianasBootstrap);
+  const bins = 25;
+  const binWidth = (max - min) / bins;
+  const histogram = new Array(bins).fill(0);
+  
+  medianasBootstrap.forEach(valor => {
+    const binIndex = Math.min(Math.floor((valor - min) / binWidth), bins - 1);
+    histogram[binIndex]++;
+  });
+  
+  const maxCount = Math.max(...histogram);
+  
+  // Dibujar barras
+  const gradient = ctx.createLinearGradient(0, margin.top, 0, height - margin.bottom);
+  gradient.addColorStop(0, '#89CDF1');
+  gradient.addColorStop(1, '#A855F7');
+  
+  histogram.forEach((count, i) => {
+    const x = margin.left + (i * chartWidth / bins);
+    const barHeight = (count / maxCount) * chartHeight;
+    const y = margin.top + chartHeight - barHeight;
+    const barWidth = chartWidth / bins - 2;
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x + 1, y, barWidth, barHeight);
+  });
+  
+  // Línea de mediana original
+  ctx.strokeStyle = '#F4A6A6';
+  ctx.lineWidth = 3;
+  const medianaX = margin.left + ((medianaOriginal - min) / (max - min)) * chartWidth;
+  ctx.beginPath();
+  ctx.moveTo(medianaX, margin.top);
+  ctx.lineTo(medianaX, margin.top + chartHeight);
+  ctx.stroke();
+  
+  // Título
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 18px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Distribución Bootstrap de la Mediana Salarial', width / 2, 25);
+  
+  // Etiquetas de ejes
+  ctx.font = '12px Arial';
+  ctx.fillText('Salario Mediano (€)', width / 2, height - 10);
+  
+  // Etiquetas del eje X
+  const numLabels = 5;
+  for(let i = 0; i <= numLabels; i++) {
+    const value = min + (max - min) * i / numLabels;
+    const x = margin.left + chartWidth * i / numLabels;
+    ctx.fillText(Math.round(value/1000) + 'k', x, height - margin.bottom + 20);
+  }
+}
+
+// Función para reiniciar
+function reiniciar() {
+  pasoActual = 0;
+  muestrasBootstrap = [];
+  medianasBootstrap = [];
+  modoAuto = false;
+  
+  for(let i = 0; i < 7; i++) {
+    document.getElementById(`paso${i}`).classList.remove('paso-activo', 'paso-completado');
+    document.getElementById(`contenido${i}`).style.display = 'none';
+  }
+  
+  document.getElementById('paso0').classList.add('paso-activo');
+  document.getElementById('progreso').style.width = '0%';
+  document.getElementById('pasoActual').textContent = '0';
+  document.getElementById('porcentaje').textContent = '0%';
+  document.getElementById('resultsModal').style.display = 'none';
+  
+  document.getElementById('btnIniciar').disabled = false;
+  document.getElementById('btnSiguiente').disabled = true;
+  document.getElementById('btnAutomatico').disabled = true;
+  document.getElementById('preguntasComprension').style.display = 'none';
+}
+
+// Funciones auxiliares
+function mostrarNotificacion(mensaje, tipo = 'info') {
+  const div = document.createElement('div');
+  div.className = `alert alert-${tipo} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
+  div.style.zIndex = '9999';
+  div.innerHTML = `
+    ${mensaje}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
+  document.body.appendChild(div);
+  
+  setTimeout(() => {
+    div.remove();
+  }, 3000);
+}
+
+function mostrarRespuesta(num) {
+  const respuesta = document.getElementById(`respuesta${num}`);
+  respuesta.style.display = respuesta.style.display === 'none' ? 'block' : 'none';
+}
+
+function descargarResultados() {
+  const contenido = `
+Resultados del Bootstrap - Análisis de Salarios
+==============================================
+Fecha: ${new Date().toLocaleString()}
+
+Datos originales: [${datos.join(', ')}]
+Tamaño de muestra: ${datos.length} empleados
+Mediana muestral: ${formatearSalario(medianaOriginal)}
+Media muestral: ${formatearSalario(mediaOriginal)}
+
+Resultados Bootstrap (1000 iteraciones):
+- Mediana bootstrap: ${formatearSalario(calcularMediana(medianasBootstrap))}
+- IC 95%: [${formatearSalario(medianasBootstrap[Math.floor(0.025 * medianasBootstrap.length)])}, ${formatearSalario(medianasBootstrap[Math.floor(0.975 * medianasBootstrap.length)])}]
+
+Interpretación:
+- La mediana es más robusta que la media ante valores atípicos
+- Útil para establecer políticas salariales competitivas
+- El intervalo de confianza proporciona un rango de valores plausibles
+  `;
+  
+  const blob = new Blob([contenido], { type: 'text/plain' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'resultados_bootstrap_mediana.txt';
+  a.click();
+  window.URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('📥 Resultados descargados', 'success');
+}
+
+function compartirResultados() {
+  const ic95_inf = medianasBootstrap[Math.floor(0.025 * medianasBootstrap.length)];
+  const ic95_sup = medianasBootstrap[Math.floor(0.975 * medianasBootstrap.length)];
+  const texto = `💼 Bootstrap Mediana Salarial: ${formatearSalario(medianaOriginal)}, IC95% [${formatearSalario(ic95_inf)}, ${formatearSalario(ic95_sup)}]`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Resultados Bootstrap - Mediana Salarial',
+      text: texto
+    });
+  } else {
+    navigator.clipboard.writeText(texto);
+    mostrarNotificacion('📋 Copiado al portapapeles', 'info');
+  }
+}
+
+// Inicializar
+window.onload = function() {
+  calcularEstadisticos();
+};
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('resultsModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    cerrarResultados();
+  }
+});
+</script>
+
+</body>
+</html>

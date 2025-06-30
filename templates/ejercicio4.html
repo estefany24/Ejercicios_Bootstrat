@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio 4 - Bootstrap para la Proporción</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --azure: #89CDF1;
+      --mint: #7ED4AD;
+      --coral: #F4A6A6;
+      --pink: #F48FB1;
+      --plum: #A855F7;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* Header elegante */
+    .hero-section {
+      background: linear-gradient(135deg, var(--azure) 0%, var(--plum) 100%);
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Layout principal de 2 columnas */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      align-items: start;
+    }
+
+    /* Columna izquierda - Controles */
+    .left-column {
+      position: sticky;
+      top: 2rem;
+      height: fit-content;
+    }
+
+    /* Columna derecha - Contenido principal */
+    .right-column {
+      min-height: 100vh;
+    }
+
+    .right-column .main-card {
+      height: fit-content;
+    }
+
+    /* Cards principales */
+    .main-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: none;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .main-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    }
+
+    .card-header-custom {
+      padding: 1.5rem;
+      border: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      position: relative;
+    }
+
+    .header-teoria {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+      color: white;
+    }
+
+    .header-datos {
+      background: linear-gradient(135deg, var(--mint), var(--coral));
+      color: white;
+    }
+
+    .header-controles {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+    }
+
+    .header-proceso {
+      background: linear-gradient(135deg, var(--pink), var(--plum));
+      color: white;
+    }
+
+    .header-resultados {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+      color: white;
+    }
+
+    /* Estadísticas circulares mejoradas */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .stat-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-circle::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.05) rotate(180deg); }
+    }
+
+    .stat-1 { background: linear-gradient(135deg, var(--azure), var(--mint)); }
+    .stat-2 { background: linear-gradient(135deg, var(--mint), var(--coral)); }
+    .stat-3 { background: linear-gradient(135deg, var(--coral), var(--pink)); }
+
+    .stat-value {
+      font-size: 1.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    /* Botones mejorados */
+    .btn-custom {
+      border-radius: 25px;
+      font-weight: 600;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-custom::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: all 0.3s ease;
+    }
+
+    .btn-custom:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn-iniciar {
+      background: linear-gradient(135deg, var(--mint), var(--azure));
+      color: white;
+      animation: btn-pulse 2s infinite;
+    }
+
+    .btn-siguiente {
+      background: linear-gradient(135deg, var(--azure), var(--plum));
+      color: white;
+    }
+
+    .btn-automatico {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+    }
+
+    .btn-reiniciar {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+    }
+
+    @keyframes btn-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+      50% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    }
+
+    /* Progreso personalizado */
+    .progress-custom {
+      height: 25px;
+      background: linear-gradient(90deg, #f1f3f4, #e8eaed);
+      border-radius: 25px;
+      overflow: hidden;
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .progress-bar-custom {
+      height: 100%;
+      background: linear-gradient(90deg, var(--azure), var(--mint), var(--coral), var(--pink), var(--plum));
+      border-radius: 25px;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-custom::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Pasos del proceso - Scroll vertical */
+    .pasos-container {
+      height: auto;
+      max-height: none;
+      overflow-y: visible;
+      padding-right: 0.5rem;
+    }
+
+    .pasos-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .pasos-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .pasos-container::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, var(--azure), var(--plum));
+      border-radius: 10px;
+    }
+
+    .pasos-container::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+    }
+
+    .paso-card {
+      background: white;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .paso-activo {
+      border-color: var(--azure);
+      box-shadow: 0 0 20px rgba(137, 205, 241, 0.3);
+      transform: scale(1.01);
+    }
+
+    .paso-completado {
+      border-color: var(--mint);
+      background: linear-gradient(145deg, #f0fff4, #e6fffa);
+      opacity: 0.9;
+    }
+
+    .paso-header {
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-bottom: 1px solid #dee2e6;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .paso-activo .paso-header {
+      background: linear-gradient(135deg, var(--azure), var(--mint));
+      color: white;
+    }
+
+    .paso-completado .paso-header {
+      background: linear-gradient(135deg, var(--mint), var(--coral));
+      color: white;
+    }
+
+    .paso-content {
+      padding: 1.5rem;
+      min-height: auto;
+    }
+
+    /* Cajas de contenido */
+    .concept-box {
+      background: linear-gradient(145deg, #f0f7ff, #e6f3ff);
+      border-left: 5px solid var(--azure);
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 15px 15px 0;
+      position: relative;
+    }
+
+    .concept-box::before {
+      content: '💡';
+      position: absolute;
+      top: -8px;
+      left: -12px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .example-box {
+      background: linear-gradient(145deg, #fff8e1, #fff3c4);
+      border-left: 5px solid var(--coral);
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 15px 15px 0;
+      position: relative;
+    }
+
+    .example-box::before {
+      content: '🔍';
+      position: absolute;
+      top: -8px;
+      left: -12px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      font-size: 1rem;
+    }
+
+    .formula-box {
+      background: linear-gradient(145deg, #f1f8e9, #e8f5e9);
+      border: 3px dashed var(--mint);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 15px;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      position: relative;
+    }
+
+    .formula-box::before {
+      content: '📐';
+      position: absolute;
+      top: -12px;
+      left: 15px;
+      background: white;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .interactive-demo {
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      border: 2px solid #e9ecef;
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Highlights y badges */
+    .stat-highlight {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-block;
+      box-shadow: 0 2px 10px rgba(244, 166, 166, 0.3);
+    }
+
+    .badge-custom {
+      background: linear-gradient(135deg, var(--plum), var(--azure));
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Modal para resultados */
+    .results-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1050;
+      padding: 2rem;
+    }
+
+    .results-content {
+      background: white;
+      border-radius: 20px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #666;
+      z-index: 1;
+    }
+
+    /* Canvas mejorado */
+    #graficoCanvas {
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      background: white;
+      max-width: 100%;
+    }
+
+    /* Elementos específicos para proporción */
+    .product-item {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 3px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-pass {
+      background: linear-gradient(135deg, var(--mint), var(--azure));
+      color: white;
+      box-shadow: 0 2px 8px rgba(126, 212, 173, 0.3);
+    }
+
+    .product-fail {
+      background: linear-gradient(135deg, var(--coral), var(--pink));
+      color: white;
+      box-shadow: 0 2px 8px rgba(244, 166, 166, 0.3);
+    }
+
+    .product-item.highlighted {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .product-item::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      animation: product-shine 3s ease-in-out infinite;
+    }
+
+    @keyframes product-shine {
+      0%, 100% { transform: rotate(0deg) scale(0); }
+      50% { transform: rotate(180deg) scale(1); }
+    }
+
+    .proportion-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .proportion-bar {
+      height: 30px;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 1rem 0;
+      position: relative;
+      background: #e9ecef;
+    }
+
+    .proportion-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--mint), var(--azure));
+      transition: width 1s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .quality-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .quality-metric {
+      background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .quality-metric:hover {
+      border-color: var(--azure);
+      transform: translateY(-2px);
+    }
+
+    .quality-metric .value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--plum);
+    }
+
+    .quality-metric .label {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.3rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .left-column {
+        position: relative;
+        top: 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .stat-circle {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .stat-value {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 2rem 0;
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .btn-custom {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      .main-layout {
+        padding: 0 0.5rem;
+      }
+
+      .quality-metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animaciones de entrada */
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Volver button */
+    .btn-volver {
+      background: linear-gradient(135deg, #6c757d, #495057);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.6rem 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      margin-bottom: 2rem;
+    }
+
+    .btn-volver:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      color: white;
+    }
+
+    /* Tooltip mejorado */
+    .tooltip-custom {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+      color: var(--plum);
+      text-decoration: underline dotted;
+      font-weight: 600;
+    }
+
+    .tooltip-custom:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #333;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      z-index: 1000;
+      font-size: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .tooltip-custom:hover::before {
+      content: '';
+      position: absolute;
+      bottom: 115%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #333;
+      z-index: 1000;
+    }
+
+    .percentage-formatter {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+
+    /* Confidence interval visualization */
+    .ci-visualization {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .ci-line {
+      height: 4px;
+      background: linear-gradient(90deg, var(--coral), var(--pink));
+      border-radius: 2px;
+      margin: 0.5rem 0;
+      position: relative;
+    }
+
+    .ci-point {
+      position: absolute;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      background: var(--plum);
+      border-radius: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 2px 8px rgba(168, 85, 247, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header Hero -->
+<div class="hero-section">
+  <div class="container">
+    <div class="hero-content text-center">
+      <h1 class="display-4 fw-bold mb-3">
+        <i class="bi bi-clipboard-check-fill"></i> Bootstrap para la Proporción
+      </h1>
+      <p class="lead mb-4">Estima la tasa de éxito del proceso de control de calidad usando Bootstrap</p>
+      <div class="badge-custom">
+        <i class="bi bi-shield-check"></i> Ejercicio Interactivo • Nivel Intermedio • 12-18 min
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <!-- Navegación -->
+  <div class="mb-4 text-center">
+    <a href="/" class="btn btn-volver">
+      <i class="bi bi-arrow-left"></i> Volver a Ejercicios
+    </a>
+  </div>
+
+  <!-- Layout principal de 2 columnas -->
+  <div class="main-layout">
+    
+    <!-- COLUMNA IZQUIERDA - CONTROLES -->
+    <div class="left-column">
+      
+      <!-- 1. TEORÍA FUNDAMENTAL -->
+      <div class="main-card">
+        <div class="card-header-custom header-teoria">
+          <i class="bi bi-book-fill me-2"></i>
+          Proporción en Control de Calidad
+        </div>
+        <div class="p-3">
+          <div class="concept-box">
+            <h6 class="fw-bold mb-2">¿Qué es una Proporción?</h6>
+            <p class="mb-2 small">La <strong>proporción</strong> es la fracción de elementos que cumplen una condición específica. En control de calidad: <span class="tooltip-custom" data-tooltip="Productos que pasan la inspección dividido por el total">tasa de éxito</span>.</p>
+          </div>
+          
+          <div class="example-box">
+            <h6 class="fw-bold mb-2">Contexto Industrial</h6>
+            <p class="mb-0 small">Un inspector revisa productos y clasifica cada uno como "pasa" (1) o "falla" (0) para estimar la calidad del proceso completo.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. CONFIGURACIÓN DE DATOS -->
+      <div class="main-card">
+        <div class="card-header-custom header-datos">
+          <i class="bi bi-clipboard-data me-2"></i>
+          Datos de Inspección
+        </div>
+        <div class="p-3">
+          <div class="interactive-demo">
+            <label class="form-label fw-bold mb-2 small">
+              <i class="bi bi-check2-square"></i> Resultados (1=pasa, 0=falla):
+            </label>
+            <input type="text" id="datosInput" class="form-control mb-3" 
+                   value="1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0">
+            <div class="d-grid gap-2">
+              <button onclick="actualizarDatos()" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-arrow-clockwise"></i> Actualizar
+              </button>
+              <button onclick="generarDatosAleatorios()" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-dice-3-fill"></i> Aleatorios
+              </button>
+            </div>
+          </div>
+          
+          <div class="stats-grid">
+            <div class="text-center">
+              <div class="stat-circle stat-1">
+                <div class="stat-value" id="tamanoMuestra">15</div>
+                <div class="stat-label">Productos</div>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="stat-circle stat-2">
+                <div class="stat-value" id="exitos">10</div>
+                <div class="stat-label">Éxitos</div>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="stat-circle stat-3">
+                <div class="stat-value percentage-formatter" id="proporcionOriginal">66.7%</div>
+                <div class="stat-label">Proporción</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. CONTROLES DE SIMULACIÓN -->
+      <div class="main-card">
+        <div class="card-header-custom header-controles">
+          <i class="bi bi-controller me-2"></i>
+          Controles de Simulación
+        </div>
+        <div class="p-3">
+          <div class="d-grid gap-2">
+            <button id="btnIniciar" onclick="iniciarProceso()" class="btn-custom btn-iniciar">
+              <i class="bi bi-play-fill"></i> Iniciar Simulación
+            </button>
+            <button id="btnSiguiente" onclick="siguientePaso()" class="btn-custom btn-siguiente" disabled>
+              <i class="bi bi-skip-forward-fill"></i> Siguiente Paso
+            </button>
+            <button id="btnAutomatico" onclick="modoAutomatico()" class="btn-custom btn-automatico" disabled>
+              <i class="bi bi-lightning-fill"></i> Modo Automático
+            </button>
+            <button id="btnReiniciar" onclick="reiniciar()" class="btn-custom btn-reiniciar">
+              <i class="bi bi-arrow-clockwise"></i> Reiniciar
+            </button>
+          </div>
+          
+          <div class="progress-custom">
+            <div id="progreso" class="progress-bar-custom" style="width: 0%"></div>
+          </div>
+          <div class="text-center">
+            <small class="text-muted fw-bold">
+              Paso <span id="pasoActual">0</span> de 7 • 
+              <span id="porcentaje">0%</span>
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PREGUNTAS DE COMPRENSIÓN -->
+      <div class="main-card">
+        <div class="card-header-custom" style="background: linear-gradient(135deg, var(--plum), var(--coral)); color: white;">
+          <i class="bi bi-question-circle-fill me-2"></i>
+          Verificación de Aprendizaje
+        </div>
+        <div class="p-3">
+          <div id="preguntasComprension" style="display:none;">
+            <div class="mb-3">
+              <h6 class="small fw-bold">1. ¿Cuándo usar Bootstrap para proporciones?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(1)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta1" class="alert alert-info mt-2 small" style="display:none;">
+                Cuando la muestra es pequeña o no se cumple la aproximación normal (np ≥ 5, n(1-p) ≥ 5).
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="small fw-bold">2. ¿Diferencia con método normal?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(2)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta2" class="alert alert-info mt-2 small" style="display:none;">
+                Bootstrap no requiere suposiciones de normalidad, especialmente útil para proporciones extremas.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6 class="small fw-bold">3. ¿Aplicación en industria?</h6>
+              <button class="btn btn-outline-primary btn-sm" onclick="mostrarRespuesta(3)">
+                <i class="bi bi-eye-fill"></i> Ver
+              </button>
+              <div id="respuesta3" class="alert alert-info mt-2 small" style="display:none;">
+                Control de calidad, tasas de defecto, eficacia de tratamientos, confiabilidad de sistemas.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNA DERECHA - PROCESO PASO A PASO -->
+    <div class="right-column">
+      <div class="main-card">
+        <div class="card-header-custom header-proceso">
+          <i class="bi bi-list-check me-2"></i>
+          Proceso Bootstrap para la Proporción
+        </div>
+        <div class="pasos-container p-3">
+          
+          <!-- Paso 0: Conceptos Fundamentales -->
+          <div id="paso0" class="paso-card paso-activo">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-rocket-takeoff-fill me-2"></i>
+                Paso 0: Conceptos Fundamentales
+              </h5>
+            </div>
+            <div id="contenido0" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 1: Estadístico Original -->
+          <div id="paso1" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calculator-fill me-2"></i>
+                Paso 1: Calcular la Proporción Original
+              </h5>
+            </div>
+            <div id="contenido1" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 2: Primera Muestra Bootstrap -->
+          <div id="paso2" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-shuffle me-2"></i>
+                Paso 2: Generar Primera Muestra Bootstrap
+              </h5>
+            </div>
+            <div id="contenido2" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 3: Calcular Proporción Bootstrap -->
+          <div id="paso3" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-calculator me-2"></i>
+                Paso 3: Calcular Proporción Bootstrap
+              </h5>
+            </div>
+            <div id="contenido3" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 4: Repetir Proceso -->
+          <div id="paso4" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-arrow-repeat me-2"></i>
+                Paso 4: Repetir el Proceso (1000 veces)
+              </h5>
+            </div>
+            <div id="contenido4" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 5: Analizar Distribución -->
+          <div id="paso5" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-bar-chart-fill me-2"></i>
+                Paso 5: Analizar la Distribución Bootstrap
+              </h5>
+            </div>
+            <div id="contenido5" class="paso-content" style="display:none;"></div>
+          </div>
+          
+          <!-- Paso 6: Intervalos de Confianza -->
+          <div id="paso6" class="paso-card">
+            <div class="paso-header">
+              <h5 class="mb-0">
+                <i class="bi bi-graph-up-arrow me-2"></i>
+                Paso 6: Calcular Intervalos de Confianza
+              </h5>
+            </div>
+            <div id="contenido6" class="paso-content" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Resultados -->
+<div id="resultsModal" class="results-modal">
+  <div class="results-content">
+    <button class="modal-close" onclick="cerrarResultados()">&times;</button>
+    <div class="main-card m-0">
+      <div class="card-header-custom header-resultados">
+        <i class="bi bi-trophy-fill me-2"></i>
+        Resultados Finales del Bootstrap
+      </div>
+      <div class="p-4">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="p-4 bg-light rounded-3 h-100">
+              <h5 class="mb-3">
+                <i class="bi bi-clipboard-data-fill text-primary me-2"></i>
+                Resumen de Resultados
+              </h5>
+              <table class="table table-borderless">
+                <tr>
+                  <td class="fw-bold">Tamaño de muestra:</td>
+                  <td><span class="badge-custom" id="resultTamano"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Proporción original:</td>
+                  <td><span class="stat-highlight" id="resultProporcion"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Proporción bootstrap:</td>
+                  <td><span class="stat-highlight" id="resultProporcionBootstrap"></span></td>
+                </tr>
+                <tr>
+                  <td class="fw-bold">Intervalo de Confianza 95%:</td>
+                  <td><span class="stat-highlight" id="resultIC"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="p-4 bg-info bg-opacity-10 rounded-3 h-100">
+              <h5 class="mb-3">
+                <i class="bi bi-lightbulb-fill text-info me-2"></i>
+                Interpretación de Calidad
+              </h5>
+              <p id="interpretacionResultados" class="mb-3"></p>
+              <div class="alert alert-success border-0">
+                <h6 class="alert-heading">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  Recomendación de Proceso
+                </h6>
+                <p id="conclusionFinal" class="mb-0"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mt-4">
+          <h5 class="mb-3">
+            <i class="bi bi-graph-up text-primary me-2"></i>
+            Distribución Bootstrap de la Proporción
+          </h5>
+          <div class="text-center">
+            <canvas id="graficoCanvas" width="800" height="400"></canvas>
+          </div>
+        </div>
+        
+        <div class="mt-4 text-center">
+          <button onclick="descargarResultados()" class="btn btn-custom btn-siguiente me-2" style="width: auto;">
+            <i class="bi bi-download"></i> Descargar Resultados
+          </button>
+          <button onclick="compartirResultados()" class="btn btn-custom btn-automatico" style="width: auto;">
+            <i class="bi bi-share-fill"></i> Compartir Resultados
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Variables globales
+let datos = [1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0];
+let pasoActual = 0;
+let proporcionOriginal = 0;
+let exitosOriginales = 0;
+let muestrasBootstrap = [];
+let proporcionesBootstrap = [];
+let modoAuto = false;
+
+// Función para calcular la proporción
+function calcularProporcion(arr) {
+  const exitos = arr.filter(x => x === 1).length;
+  return exitos / arr.length;
+}
+
+// Función para formatear porcentaje
+function formatearPorcentaje(valor) {
+  return (valor * 100).toFixed(1) + '%';
+}
+
+// Función para actualizar datos
+function actualizarDatos() {
+  const input = document.getElementById('datosInput').value;
+  try {
+    datos = input.split(',').map(x => {
+      const val = parseInt(x.trim());
+      if (val !== 0 && val !== 1) throw new Error('Solo valores 0 y 1');
+      return val;
+    }).filter(x => !isNaN(x));
+    
+    if (datos.length < 5) throw new Error('Necesitas al menos 5 valores');
+    
+    calcularEstadisticos();
+    reiniciar();
+    
+    mostrarNotificacion('✅ Datos de inspección actualizados correctamente', 'success');
+    
+  } catch (e) {
+    mostrarNotificacion('❌ Error: Ingresa solo valores 0 (falla) y 1 (pasa) separados por comas', 'danger');
+  }
+}
+
+// Función para generar datos aleatorios de control de calidad
+function generarDatosAleatorios() {
+  const n = Math.floor(Math.random() * 15) + 10; // Entre 10 y 25 productos
+  const probabilidadExito = 0.5 + Math.random() * 0.4; // Entre 50% y 90%
+  
+  datos = [];
+  for(let i = 0; i < n; i++) {
+    datos.push(Math.random() < probabilidadExito ? 1 : 0);
+  }
+  
+  document.getElementById('datosInput').value = datos.join(', ');
+  calcularEstadisticos();
+  reiniciar();
+  mostrarNotificacion('🎲 Datos de control de calidad aleatorios generados', 'info');
+}
+
+// Función para calcular estadísticos
+function calcularEstadisticos() {
+  exitosOriginales = datos.filter(x => x === 1).length;
+  proporcionOriginal = calcularProporcion(datos);
+  
+  document.getElementById('tamanoMuestra').textContent = datos.length;
+  document.getElementById('exitos').textContent = exitosOriginales;
+  document.getElementById('proporcionOriginal').textContent = formatearPorcentaje(proporcionOriginal);
+}
+
+// Función para iniciar el proceso
+function iniciarProceso() {
+  calcularEstadisticos();
+  pasoActual = 0;
+  document.getElementById('btnIniciar').disabled = true;
+  document.getElementById('btnSiguiente').disabled = false;
+  document.getElementById('btnAutomatico').disabled = false;
+  document.getElementById('preguntasComprension').style.display = 'block';
+  siguientePaso();
+}
+
+// Función para modo automático
+function modoAutomatico() {
+  modoAuto = true;
+  document.getElementById('btnAutomatico').disabled = true;
+  document.getElementById('btnSiguiente').disabled = true;
+  
+  function avanzarAutomatico() {
+    if (pasoActual < 7 && modoAuto) {
+      siguientePaso();
+      setTimeout(avanzarAutomatico, 2500);
+    }
+  }
+  avanzarAutomatico();
+}
+
+// Función principal para avanzar pasos
+function siguientePaso() {
+  if (pasoActual > 0) {
+    document.getElementById(`paso${pasoActual-1}`).classList.remove('paso-activo');
+    document.getElementById(`paso${pasoActual-1}`).classList.add('paso-completado');
+  }
+  
+  if (pasoActual < 7) {
+    document.getElementById(`paso${pasoActual}`).classList.add('paso-activo');
+    const contenido = document.getElementById(`contenido${pasoActual}`);
+    contenido.style.display = 'block';
+    contenido.classList.add('fade-in');
+    
+    // Scroll al paso activo
+    document.getElementById(`paso${pasoActual}`).scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'center' 
+    });
+    
+    ejecutarPaso(pasoActual);
+    pasoActual++;
+    
+    // Actualizar progreso
+    const progreso = (pasoActual / 7) * 100;
+    document.getElementById('progreso').style.width = progreso + '%';
+    document.getElementById('pasoActual').textContent = pasoActual;
+    document.getElementById('porcentaje').textContent = Math.round(progreso) + '%';
+    
+    if (pasoActual >= 7) {
+      document.getElementById('btnSiguiente').disabled = true;
+      document.getElementById('btnAutomatico').disabled = true;
+      mostrarResultados();
+    }
+  }
+}
+
+// Función para mostrar resultados en modal
+function mostrarResultados() {
+  const proporcionBootstrapFinal = proporcionesBootstrap.reduce((a, b) => a + b, 0) / proporcionesBootstrap.length;
+  proporcionesBootstrap.sort((a, b) => a - b);
+  const ic95_inf = proporcionesBootstrap[Math.floor(0.025 * proporcionesBootstrap.length)];
+  const ic95_sup = proporcionesBootstrap[Math.floor(0.975 * proporcionesBootstrap.length)];
+  
+  document.getElementById('resultTamano').textContent = datos.length + ' productos';
+  document.getElementById('resultProporcion').textContent = formatearPorcentaje(proporcionOriginal);
+  document.getElementById('resultProporcionBootstrap').textContent = formatearPorcentaje(proporcionBootstrapFinal);
+  document.getElementById('resultIC').textContent = `[${formatearPorcentaje(ic95_inf)}, ${formatearPorcentaje(ic95_sup)}]`;
+  
+  // Interpretación
+  const amplitudIC = ic95_sup - ic95_inf;
+  const precision = amplitudIC < 0.1 ? "muy precisa" : amplitudIC < 0.2 ? "moderadamente precisa" : "poco precisa";
+  
+  document.getElementById('interpretacionResultados').innerHTML = `
+    La estimación de la tasa de éxito es <strong>${precision}</strong> con una amplitud del IC de ${formatearPorcentaje(amplitudIC)}. 
+    El proceso muestra una tasa de éxito del ${formatearPorcentaje(proporcionOriginal)}.
+  `;
+  
+  let recomendacion;
+  if (proporcionOriginal >= 0.95) {
+    recomendacion = "Excelente calidad del proceso. Mantener los estándares actuales.";
+  } else if (proporcionOriginal >= 0.85) {
+    recomendacion = "Buena calidad. Considerar mejoras menores para alcanzar la excelencia.";
+  } else if (proporcionOriginal >= 0.70) {
+    recomendacion = "Calidad aceptable pero mejorable. Investigar causas de fallas.";
+  } else {
+    recomendacion = "Calidad deficiente. Revisión urgente del proceso necesaria.";
+  }
+  
+  document.getElementById('conclusionFinal').innerHTML = recomendacion;
+  
+  document.getElementById('resultsModal').style.display = 'flex';
+  dibujarHistograma();
+}
+
+function cerrarResultados() {
+  document.getElementById('resultsModal').style.display = 'none';
+}
+
+// Función para ejecutar cada paso
+function ejecutarPaso(paso) {
+  const contenido = document.getElementById(`contenido${paso}`);
+  
+  switch(paso) {
+    case 0:
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-3">🎯 Objetivo del Ejercicio</h6>
+          <p class="mb-3">Estimar la <strong>tasa de éxito del proceso de control de calidad</strong> usando 
+          datos de <strong>${datos.length} productos inspeccionados</strong> para evaluar la confiabilidad del sistema.</p>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-3">📐 Fórmula de la Proporción</h6>
+          <div style="font-size: 1.1em; margin: 1rem 0;">
+            <strong>p̂ = x / n</strong>
+          </div>
+          <p class="mb-0 small">Donde: p̂ = proporción muestral, x = número de éxitos, n = tamaño de muestra</p>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-3">🔍 Importancia en Control de Calidad</h6>
+          <p class="mb-3">La proporción actual es <span class="stat-highlight">${formatearPorcentaje(proporcionOriginal)}</span>:</p>
+          <ul class="mb-3 small">
+            <li>Mide la efectividad del proceso productivo</li>
+            <li>Ayuda a establecer estándares de calidad</li>
+            <li>Permite comparar con benchmarks industriales</li>
+          </ul>
+          <div class="alert alert-info border-0 mb-0 small">
+            <strong>👉 El Bootstrap</strong> nos dará intervalos de confianza más precisos, especialmente con muestras pequeñas.
+          </div>
+        </div>`;
+      break;
+      
+    case 1:
+      const fallos = datos.length - exitosOriginales;
+      
+      contenido.innerHTML = `
+        <div class="alert alert-primary border-0 mb-3">
+          <h6 class="fw-bold mb-2"><i class="bi bi-clipboard-check me-2"></i>Resultados de Inspección</h6>
+          <div class="proportion-visual">
+            ${datos.map(d => 
+              `<div class="product-item ${d === 1 ? 'product-pass' : 'product-fail'}">
+                ${d === 1 ? '✓' : '✗'}
+              </div>`
+            ).join('')}
+          </div>
+          <p class="mb-0 small"><strong>n = ${datos.length} productos inspeccionados</strong></p>
+        </div>
+        
+        <div class="formula-box">
+          <h6 class="fw-bold mb-2">Cálculo:</h6>
+          <p class="mb-1 small">Éxitos (✓): ${exitosOriginales}</p>
+          <p class="mb-1 small">Fallos (✗): ${fallos}</p>
+          <p class="mb-0">Proporción = <span class="stat-highlight">${formatearPorcentaje(proporcionOriginal)}</span></p>
+        </div>
+        
+        <div class="proportion-bar">
+          <div class="proportion-fill" style="width: ${proporcionOriginal * 100}%">
+            ${formatearPorcentaje(proporcionOriginal)} de éxito
+          </div>
+        </div>
+        
+        <div class="quality-metrics">
+          <div class="quality-metric">
+            <div class="value">${exitosOriginales}</div>
+            <div class="label">Productos que pasan</div>
+          </div>
+          <div class="quality-metric">
+            <div class="value">${fallos}</div>
+            <div class="label">Productos que fallan</div>
+          </div>
+        </div>`;
+      break;
+      
+    case 2:
+      const muestraBootstrap = generarMuestraBootstrap();
+      muestrasBootstrap.push(muestraBootstrap);
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">🎲 Remuestreo con Reemplazo</h6>
+          <p class="mb-2 small">Seleccionamos ${datos.length} resultados al azar de nuestros datos originales, <strong>con reemplazo</strong>.</p>
+        </div>
+        
+        <div class="interactive-demo">
+          <h6 class="fw-bold mb-2">Primera Muestra Bootstrap:</h6>
+          <div class="proportion-visual mb-3">
+            ${muestraBootstrap.map(val => 
+              `<div class="product-item ${val === 1 ? 'product-pass' : 'product-fail'} highlighted">
+                ${val === 1 ? '✓' : '✗'}
+              </div>`
+            ).join('')}
+          </div>
+          <div class="d-flex justify-content-center">
+            <div class="quality-metrics" style="grid-template-columns: repeat(3, 1fr); max-width: 300px;">
+              <div class="quality-metric">
+                <div class="value">${muestraBootstrap.length}</div>
+                <div class="label">Total</div>
+              </div>
+              <div class="quality-metric">
+                <div class="value">${muestraBootstrap.filter(x => x === 1).length}</div>
+                <div class="label">Éxitos</div>
+              </div>
+              <div class="quality-metric">
+                <div class="value">${muestraBootstrap.filter(x => x === 0).length}</div>
+                <div class="label">Fallos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-2">🔍 Observación</h6>
+          <p class="mb-0 small">Esta muestra bootstrap simula otra posible inspección del mismo proceso productivo.</p>
+        </div>`;
+      break;
+      
+    case 3:
+      const proporcionBootstrap = calcularProporcion(muestrasBootstrap[0]);
+      proporcionesBootstrap.push(proporcionBootstrap);
+      const diferencia = proporcionBootstrap - proporcionOriginal;
+      const diferenciaRelativa = (diferencia / proporcionOriginal) * 100;
+      
+      contenido.innerHTML = `
+        <div class="formula-box">
+          <h6 class="fw-bold mb-2">📊 Proporción Bootstrap #1:</h6>
+          <p class="mb-0">p̂ = <span class="stat-highlight">${formatearPorcentaje(proporcionBootstrap)}</span></p>
+        </div>
+        
+        <div class="row">
+          <div class="col-6">
+            <div class="text-center p-2 bg-light rounded">
+              <strong class="text-primary small">${formatearPorcentaje(proporcionOriginal)}</strong>
+              <br><small class="text-muted">Original</small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="text-center p-2 bg-light rounded">
+              <strong class="text-success small">${formatearPorcentaje(proporcionBootstrap)}</strong>
+              <br><small class="text-muted">Bootstrap</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="proportion-bar mt-3">
+          <div class="proportion-fill" style="width: ${proporcionBootstrap * 100}%">
+            ${formatearPorcentaje(proporcionBootstrap)} bootstrap
+          </div>
+        </div>
+        
+        <div class="concept-box mt-3">
+          <h6 class="fw-bold mb-2">💡 Variación en Calidad</h6>
+          <p class="mb-1 small">Diferencia absoluta: <strong>${diferencia > 0 ? '+' : ''}${formatearPorcentaje(diferencia)}</strong></p>
+          <p class="mb-0 small">Diferencia relativa: <strong>${diferenciaRelativa > 0 ? '+' : ''}${diferenciaRelativa.toFixed(1)}%</strong></p>
+        </div>`;
+      break;
+      
+    case 4:
+      const startTime = Date.now();
+      for(let i = 1; i < 1000; i++) {
+        const muestra = generarMuestraBootstrap();
+        const proporcion = calcularProporcion(muestra);
+        proporcionesBootstrap.push(proporcion);
+      }
+      const endTime = Date.now();
+      
+      const minProporcion = Math.min(...proporcionesBootstrap);
+      const maxProporcion = Math.max(...proporcionesBootstrap);
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">🔄 1000 Repeticiones</h6>
+          <p class="mb-2 small">Generamos 1000 muestras bootstrap para aproximar la distribución de la proporción de éxito.</p>
+        </div>
+        
+        <div class="row">
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${endTime - startTime}ms</strong>
+              <br><small class="text-muted">Tiempo</small>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${formatearPorcentaje(minProporcion)}</strong>
+              <br><small class="text-muted">Mín</small>
+            </div>
+          </div>
+          <div class="col-4 text-center">
+            <div class="p-2 bg-light rounded">
+              <strong class="small">${formatearPorcentaje(maxProporcion)}</strong>
+              <br><small class="text-muted">Máx</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="proportion-bar mt-3" style="background: linear-gradient(90deg, var(--coral), var(--mint));">
+          <div style="position: absolute; left: ${minProporcion * 100}%; top: 0; bottom: 0; width: 2px; background: white;"></div>
+          <div style="position: absolute; left: ${maxProporcion * 100}%; top: 0; bottom: 0; width: 2px; background: white;"></div>
+          <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 0.8rem;">
+            Rango de variación
+          </div>
+        </div>
+        
+        <div class="progress mt-3" style="height: 20px;">
+          <div class="progress-bar bg-success" style="width: 100%">
+            ✓ Simulación de Control de Calidad Completada
+          </div>
+        </div>`;
+      break;
+      
+    case 5:
+      const proporcionBootstrapTotal = proporcionesBootstrap.reduce((a, b) => a + b, 0) / proporcionesBootstrap.length;
+      const proporcionesSorted = [...proporcionesBootstrap].sort((a, b) => a - b);
+      const q1 = proporcionesSorted[Math.floor(0.25 * proporcionesSorted.length)];
+      const mediana = proporcionesSorted[Math.floor(0.5 * proporcionesSorted.length)];
+      const q3 = proporcionesSorted[Math.floor(0.75 * proporcionesSorted.length)];
+      const errorEstandar = Math.sqrt(proporcionesBootstrap.reduce((a, b) => a + Math.pow(b - proporcionBootstrapTotal, 2), 0) / proporcionesBootstrap.length);
+      
+      contenido.innerHTML = `
+        <div class="alert alert-info border-0">
+          <h6 class="fw-bold mb-2">📊 Estadísticas Bootstrap</h6>
+          <div class="row text-center small">
+            <div class="col-6">
+              <strong>${formatearPorcentaje(proporcionBootstrapTotal)}</strong>
+              <br><small>Media Bootstrap</small>
+            </div>
+            <div class="col-6">
+              <strong>${formatearPorcentaje(errorEstandar)}</strong>
+              <br><small>Error Estándar</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="quality-metrics">
+          <div class="quality-metric">
+            <div class="value">${formatearPorcentaje(q1)}</div>
+            <div class="label">Q1 (25%)</div>
+          </div>
+          <div class="quality-metric">
+            <div class="value">${formatearPorcentaje(mediana)}</div>
+            <div class="label">Mediana</div>
+          </div>
+          <div class="quality-metric">
+            <div class="value">${formatearPorcentaje(q3)}</div>
+            <div class="label">Q3 (75%)</div>
+          </div>
+        </div>
+        
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">💡 Interpretación de Calidad</h6>
+          <p class="mb-0 small">El error estándar (${formatearPorcentaje(errorEstandar)}) indica la precisión de nuestra estimación de la tasa de éxito del proceso.</p>
+        </div>`;
+      break;
+      
+    case 6:
+      proporcionesBootstrap.sort((a, b) => a - b);
+      const ic95_inf = proporcionesBootstrap[Math.floor(0.025 * proporcionesBootstrap.length)];
+      const ic95_sup = proporcionesBootstrap[Math.floor(0.975 * proporcionesBootstrap.length)];
+      
+      contenido.innerHTML = `
+        <div class="concept-box">
+          <h6 class="fw-bold mb-2">📈 Intervalo de Confianza 95%</h6>
+          <p class="mb-2 small">Tomamos los percentiles 2.5% y 97.5% de la distribución bootstrap de proporciones.</p>
+        </div>
+        
+        <div class="alert alert-success border-0 text-center">
+          <h5 class="mb-1">[${formatearPorcentaje(ic95_inf)}, ${formatearPorcentaje(ic95_sup)}]</h5>
+          <small>Intervalo de Confianza 95% para la Tasa de Éxito</small>
+        </div>
+        
+        <div class="ci-visualization">
+          <div class="ci-line">
+            <div class="ci-point" style="left: ${ic95_inf * 100}%"></div>
+            <div class="ci-point" style="left: ${proporcionOriginal * 100}%"></div>
+            <div class="ci-point" style="left: ${ic95_sup * 100}%"></div>
+          </div>
+          <div class="d-flex justify-content-between small text-muted">
+            <span>${formatearPorcentaje(ic95_inf)}</span>
+            <span>Estimación: ${formatearPorcentaje(proporcionOriginal)}</span>
+            <span>${formatearPorcentaje(ic95_sup)}</span>
+          </div>
+        </div>
+        
+        <div class="example-box">
+          <h6 class="fw-bold mb-2">🔍 Aplicación en Control de Calidad</h6>
+          <p class="mb-0 small">Con 95% de confianza, la verdadera tasa de éxito del proceso está entre ${formatearPorcentaje(ic95_inf)} y ${formatearPorcentaje(ic95_sup)}. 
+          Usa este rango para evaluar si el proceso cumple con los estándares de calidad requeridos.</p>
+        </div>`;
+      break;
+  }
+}
+
+// Función para generar muestra bootstrap
+function generarMuestraBootstrap() {
+  const muestra = [];
+  for(let i = 0; i < datos.length; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * datos.length);
+    muestra.push(datos[indiceAleatorio]);
+  }
+  return muestra;
+}
+
+// Función para dibujar histograma
+function dibujarHistograma() {
+  const canvas = document.getElementById('graficoCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  const width = 800;
+  const height = 400;
+  const margin = { top: 40, right: 40, bottom: 60, left: 60 };
+  const chartWidth = width - margin.left - margin.right;
+  const chartHeight = height - margin.top - margin.bottom;
+  
+  ctx.clearRect(0, 0, width, height);
+  
+  // Crear histograma
+  const min = Math.min(...proporcionesBootstrap);
+  const max = Math.max(...proporcionesBootstrap);
+  const bins = 25;
+  const binWidth = (max - min) / bins;
+  const histogram = new Array(bins).fill(0);
+  
+  proporcionesBootstrap.forEach(valor => {
+    const binIndex = Math.min(Math.floor((valor - min) / binWidth), bins - 1);
+    histogram[binIndex]++;
+  });
+  
+  const maxCount = Math.max(...histogram);
+  
+  // Dibujar barras
+  const gradient = ctx.createLinearGradient(0, margin.top, 0, height - margin.bottom);
+  gradient.addColorStop(0, '#89CDF1');
+  gradient.addColorStop(1, '#A855F7');
+  
+  histogram.forEach((count, i) => {
+    const x = margin.left + (i * chartWidth / bins);
+    const barHeight = (count / maxCount) * chartHeight;
+    const y = margin.top + chartHeight - barHeight;
+    const barWidth = chartWidth / bins - 2;
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x + 1, y, barWidth, barHeight);
+  });
+  
+  // Línea de proporción original
+  ctx.strokeStyle = '#F4A6A6';
+  ctx.lineWidth = 3;
+  const proporcionX = margin.left + ((proporcionOriginal - min) / (max - min)) * chartWidth;
+  ctx.beginPath();
+  ctx.moveTo(proporcionX, margin.top);
+  ctx.lineTo(proporcionX, margin.top + chartHeight);
+  ctx.stroke();
+  
+  // Título
+  ctx.fillStyle = '#333';
+  ctx.font = 'bold 18px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Distribución Bootstrap de la Proporción de Éxito', width / 2, 25);
+  
+  // Etiquetas de ejes
+  ctx.font = '12px Arial';
+  ctx.fillText('Proporción de Éxito', width / 2, height - 10);
+  
+  // Etiquetas del eje X
+  const numLabels = 5;
+  for(let i = 0; i <= numLabels; i++) {
+    const value = min + (max - min) * i / numLabels;
+    const x = margin.left + chartWidth * i / numLabels;
+    ctx.fillText((value * 100).toFixed(1) + '%', x, height - margin.bottom + 20);
+  }
+}
+
+// Función para reiniciar
+function reiniciar() {
+  pasoActual = 0;
+  muestrasBootstrap = [];
+  proporcionesBootstrap = [];
+  modoAuto = false;
+  
+  for(let i = 0; i < 7; i++) {
+    document.getElementById(`paso${i}`).classList.remove('paso-activo', 'paso-completado');
+    document.getElementById(`contenido${i}`).style.display = 'none';
+  }
+  
+  document.getElementById('paso0').classList.add('paso-activo');
+  document.getElementById('progreso').style.width = '0%';
+  document.getElementById('pasoActual').textContent = '0';
+  document.getElementById('porcentaje').textContent = '0%';
+  document.getElementById('resultsModal').style.display = 'none';
+  
+  document.getElementById('btnIniciar').disabled = false;
+  document.getElementById('btnSiguiente').disabled = true;
+  document.getElementById('btnAutomatico').disabled = true;
+  document.getElementById('preguntasComprension').style.display = 'none';
+}
+
+// Funciones auxiliares
+function mostrarNotificacion(mensaje, tipo = 'info') {
+  const div = document.createElement('div');
+  div.className = `alert alert-${tipo} alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3`;
+  div.style.zIndex = '9999';
+  div.innerHTML = `
+    ${mensaje}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
+  document.body.appendChild(div);
+  
+  setTimeout(() => {
+    div.remove();
+  }, 3000);
+}
+
+function mostrarRespuesta(num) {
+  const respuesta = document.getElementById(`respuesta${num}`);
+  respuesta.style.display = respuesta.style.display === 'none' ? 'block' : 'none';
+}
+
+function descargarResultados() {
+  const ic95_inf = proporcionesBootstrap[Math.floor(0.025 * proporcionesBootstrap.length)];
+  const ic95_sup = proporcionesBootstrap[Math.floor(0.975 * proporcionesBootstrap.length)];
+  const errorEstandar = Math.sqrt(proporcionesBootstrap.reduce((a, b) => a + Math.pow(b - (proporcionesBootstrap.reduce((c, d) => c + d, 0) / proporcionesBootstrap.length), 2), 0) / proporcionesBootstrap.length);
+  
+  const contenido = `
+Resultados del Bootstrap - Análisis de Proporción en Control de Calidad
+=====================================================================
+Fecha: ${new Date().toLocaleString()}
+
+Datos originales: [${datos.join(', ')}]
+Tamaño de muestra: ${datos.length} productos
+Éxitos: ${exitosOriginales}
+Fallos: ${datos.length - exitosOriginales}
+Proporción muestral: ${formatearPorcentaje(proporcionOriginal)}
+
+Resultados Bootstrap (1000 iteraciones):
+- Proporción bootstrap: ${formatearPorcentaje(proporcionesBootstrap.reduce((a, b) => a + b, 0) / proporcionesBootstrap.length)}
+- Error estándar: ${formatearPorcentaje(errorEstandar)}
+- IC 95%: [${formatearPorcentaje(ic95_inf)}, ${formatearPorcentaje(ic95_sup)}]
+
+Evaluación de Calidad:
+- Nivel de calidad: ${proporcionOriginal >= 0.95 ? 'Excelente' : proporcionOriginal >= 0.85 ? 'Bueno' : proporcionOriginal >= 0.70 ? 'Aceptable' : 'Deficiente'}
+- Condiciones normales: np = ${(datos.length * proporcionOriginal).toFixed(1)}, n(1-p) = ${(datos.length * (1-proporcionOriginal)).toFixed(1)}
+- Recomendación Bootstrap: ${(datos.length * proporcionOriginal < 5 || datos.length * (1-proporcionOriginal) < 5) ? 'Necesario (condiciones normales no cumplidas)' : 'Recomendado para mayor precisión'}
+
+Aplicaciones:
+1. Control estadístico de procesos de calidad
+2. Certificación y auditorías de calidad
+3. Comparación con estándares industriales
+4. Planificación de inspecciones futuras
+5. Análisis de capability del proceso
+
+Interpretación del Intervalo de Confianza:
+Si repitiéramos este proceso de inspección muchas veces, el 95% de los intervalos
+calculados contendrían la verdadera tasa de éxito del proceso.
+  `;
+  
+  const blob = new Blob([contenido], { type: 'text/plain' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'resultados_bootstrap_proporcion_calidad.txt';
+  a.click();
+  window.URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('📥 Resultados de control de calidad descargados', 'success');
+}
+
+function compartirResultados() {
+  const ic95_inf = proporcionesBootstrap[Math.floor(0.025 * proporcionesBootstrap.length)];
+  const ic95_sup = proporcionesBootstrap[Math.floor(0.975 * proporcionesBootstrap.length)];
+  
+  const texto = `🔍 Bootstrap Proporción: ${formatearPorcentaje(proporcionOriginal)} de éxito, IC95% [${formatearPorcentaje(ic95_inf)}, ${formatearPorcentaje(ic95_sup)}]`;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: 'Resultados Bootstrap - Control de Calidad',
+      text: texto
+    });
+  } else {
+    navigator.clipboard.writeText(texto);
+    mostrarNotificacion('📋 Copiado al portapapeles', 'info');
+  }
+}
+
+// Inicializar
+window.onload = function() {
+  calcularEstadisticos();
+};
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('resultsModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    cerrarResultados();
+  }
+});
+</script>
+
+</body>
+</html>

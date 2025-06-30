@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Interactivo - Aprende Estadística</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --azure: #89CDF1;
+            --mint: #7ED4AD;
+            --coral: #F4A6A6;
+            --pink: #F48FB1;
+            --plum: #A855F7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Header animado con nueva paleta */
+        .hero-header {
+            background: linear-gradient(135deg, var(--azure) 0%, var(--plum) 50%, var(--pink) 100%);
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.15) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .main-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards de ejercicios súper dinámicas */
+        .exercise-grid {
+            padding: 0 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .exercise-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.1),
+                0 1px 8px rgba(0,0,0,0.1);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+            z-index: 1;
+        }
+
+        .exercise-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-15px) rotateY(5deg) rotateX(5deg);
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.2),
+                0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .exercise-header {
+            padding: 2.5rem 2rem 1.5rem;
+            position: relative;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Colores específicos para cada ejercicio */
+        .exercise-1 .exercise-header {
+            background: linear-gradient(135deg, var(--azure) 0%, var(--mint) 100%);
+        }
+
+        .exercise-2 .exercise-header {
+            background: linear-gradient(135deg, var(--mint) 0%, var(--coral) 100%);
+        }
+
+        .exercise-3 .exercise-header {
+            background: linear-gradient(135deg, var(--coral) 0%, var(--pink) 100%);
+        }
+
+        .exercise-4 .exercise-header {
+            background: linear-gradient(135deg, var(--pink) 0%, var(--plum) 100%);
+        }
+
+        .exercise-5 .exercise-header {
+            background: linear-gradient(135deg, var(--plum) 0%, var(--azure) 100%);
+        }
+
+        .exercise-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .exercise-number {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 3.5rem;
+            font-weight: 900;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .exercise-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .exercise-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .exercise-body {
+            padding: 2rem;
+            position: relative;
+        }
+
+        .exercise-description {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 0.4rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .difficulty-basico {
+            background: linear-gradient(45deg, var(--mint), var(--azure));
+            color: white;
+        }
+
+        .difficulty-intermedio {
+            background: linear-gradient(45deg, var(--coral), var(--pink));
+            color: white;
+        }
+
+        .difficulty-avanzado {
+            background: linear-gradient(45deg, var(--pink), var(--plum));
+            color: white;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            background: linear-gradient(45deg, #f1f5f9, #e2e8f0);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: linear-gradient(45deg, var(--azure), var(--mint));
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Badge tiempo */
+        .badge.bg-primary {
+            background: linear-gradient(45deg, var(--plum), var(--pink)) !important;
+            border: none;
+        }
+
+        /* Sección de información - Carrusel */
+        .info-carousel-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 4rem 0;
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        .info-carousel-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(137, 205, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(126, 212, 173, 0.1) 0%, transparent 50%);
+        }
+
+        .carousel-item {
+            text-align: center;
+            padding: 3rem 2rem;
+            position: relative;
+        }
+
+        .carousel-icon {
+            font-size: 4.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--azure), var(--plum));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: colorShift 3s ease-in-out infinite;
+        }
+
+        @keyframes colorShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(45deg); }
+        }
+
+        .carousel-content h3 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+            font-weight: 700;
+        }
+
+        .carousel-content p {
+            font-size: 1.1rem;
+            color: #4a5568;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Controles del carrusel */
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background: linear-gradient(45deg, var(--plum), var(--pink));
+            border-radius: 50%;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .carousel-indicators button {
+            background: linear-gradient(45deg, var(--azure), var(--plum));
+            margin: 0 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        /* Footer con nueva paleta */
+        .footer {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 3rem 0 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--azure), var(--mint), var(--coral), var(--pink), var(--plum));
+        }
+
+        .footer-links {
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, var(--azure), var(--mint));
+            transition: width 0.3s;
+        }
+
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+
+        .footer-links a:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Botón flotante */
+        .float-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, var(--plum), var(--pink));
+            color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        .float-button:hover {
+            background: linear-gradient(45deg, var(--pink), var(--coral));
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        /* Particles con colores de la paleta */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        .particle:nth-child(odd) {
+            background: rgba(137, 205, 241, 0.1);
+        }
+
+        .particle:nth-child(even) {
+            background: rgba(126, 212, 173, 0.1);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+            25% { transform: translateY(-100px) translateX(50px) rotate(90deg); }
+            50% { transform: translateY(-50px) translateX(-50px) rotate(180deg); }
+            75% { transform: translateY(-150px) translateX(25px) rotate(270deg); }
+        }
+
+        /* Animaciones de entrada */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Título dinámico y atractivo */
+        .section-title-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .title-decoration {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .title-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--azure), var(--plum));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .dynamic-title {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .title-main {
+            font-size: 2.5rem;
+            color: #2d3748;
+            font-weight: 700;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .title-highlight {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--coral), var(--pink), var(--plum));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            animation: slideInUp 1s ease-out 0.2s both;
+            position: relative;
+            line-height: 1.3;
+        }
+
+        .title-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(45deg, var(--coral), var(--pink), var(--plum));
+            border-radius: 2px;
+            animation: expandLine 1s ease-out 0.8s both;
+        }
+
+        /* Cards de información con layout horizontal */
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.1),
+                0 1px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.15),
+                0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-content {
+            padding: 2rem;
+        }
+
+        .info-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            font-weight: 700;
+        }
+
+        .info-content p {
+            font-size: 1rem;
+            color: #4a5568;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .title-sub {
+            font-size: 1.8rem;
+            color: #4a5568;
+            font-weight: 600;
+            animation: slideInUp 1s ease-out 0.4s both;
+        }
+
+        .title-underline {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--azure), var(--mint));
+            margin: 1.5rem auto;
+            border-radius: 2px;
+            animation: expandLine 1s ease-out 0.6s both;
+        }
+
+        .title-description {
+            font-size: 1.1rem;
+            color: #718096;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes expandLine {
+            from { width: 0; }
+            to { width: 80%; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .main-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .exercise-card {
+                margin-bottom: 1.5rem;
+            }
+
+            .exercise-card:hover {
+                transform: translateY(-10px) rotateY(0deg) rotateX(0deg);
+            }
+
+            .dynamic-title {
+                font-size: 2rem;
+            }
+
+            .title-main {
+                font-size: 1.8rem;
+            }
+
+            .title-highlight {
+                font-size: 2.5rem;
+            }
+
+            .title-sub {
+                font-size: 1.3rem;
+            }
+
+            .title-description {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+        }
+
+        /* Efectos de hover mejorados */
+        .exercise-card:hover .exercise-icon {
+            animation: bounceIntense 0.6s ease-in-out;
+        }
+
+        @keyframes bounceIntense {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(0deg); }
+            40% { transform: translateY(-15px) rotate(10deg); }
+            60% { transform: translateY(-8px) rotate(-5deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header Hero -->
+<header class="hero-header">
+    <div class="particles" id="particles"></div>
+    <div class="container hero-content">
+        <h1 class="main-title">
+            <span style="font-weight: 900;">Domina el Bootstrap Estadístico con Ejercicios Interactivos</span>
+        </h1>
+        <p class="main-subtitle">
+            Explora 5 ejercicios cuidadosamente diseñados que te llevarán desde conceptos básicos hasta aplicaciones avanzadas del método Bootstrap
+        </p>
+        <div class="mt-4">
+            <a href="#ejercicios" class="btn btn-light btn-lg me-3">
+                <i class="fas fa-play"></i> Comenzar
+            </a>
+            <a href="#info" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-info-circle"></i> Más información
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Ejercicios -->
+<section id="ejercicios" class="exercise-grid">
+    <div class="container">
+        <!-- Título de Sección Simplificado -->
+        <div class="text-center mb-5 fade-in">
+            <h2 style="font-size: 2.5rem; font-weight: 800; background: linear-gradient(45deg, var(--azure), var(--plum)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                <i class="fas fa-chart-line"></i> Bootstrap Interactivo
+            </h2>
+            <p style="font-size: 1.2rem; color: #718096; margin-top: 1rem;">
+                Aprende el método Bootstrap paso a paso con simulaciones interactivas
+            </p>
+        </div>
+        
+        <!-- Layout Horizontal - Primera fila (2 ejercicios) -->
+        <div class="row g-4 mb-4">
+            <!-- Ejercicio 1 -->
+            <div class="col-lg-6 col-md-6 fade-in">
+                <a href="/ejercicio1" class="text-decoration-none">
+                    <div class="exercise-card exercise-1">
+                        <div class="row g-0 h-100">
+                            <div class="col-5">
+                                <div class="exercise-header h-100 d-flex flex-column justify-content-center">
+                                    <div class="exercise-number">1</div>
+                                    <div class="exercise-icon">
+                                        <i class="fas fa-ruler-vertical"></i>
+                                    </div>
+                                    <h3 class="exercise-title">Bootstrap para la Media</h3>
+                                    <p class="exercise-subtitle">Alturas de Estudiantes</p>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="exercise-body h-100 d-flex flex-column justify-content-center">
+                                    <p class="exercise-description">
+                                        Aprende a estimar intervalos de confianza para la media poblacional usando datos de alturas de estudiantes universitarios.
+                                    </p>
+                                    <div class="mb-2">
+                                        <span class="difficulty-badge difficulty-basico">Básico</span>
+                                        <span class="badge bg-primary">10 min</span>
+                                    </div>
+                                    <div class="tags">
+                                        <span class="tag">Media</span>
+                                        <span class="tag">IC 95%</span>
+                                        <span class="tag">Visualización</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Ejercicio 2 -->
+            <div class="col-lg-6 col-md-6 fade-in" style="animation-delay: 0.1s;">
+                <a href="/ejercicio2" class="text-decoration-none">
+                    <div class="exercise-card exercise-2">
+                        <div class="row g-0 h-100">
+                            <div class="col-5">
+                                <div class="exercise-header h-100 d-flex flex-column justify-content-center">
+                                    <div class="exercise-number">2</div>
+                                    <div class="exercise-icon">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <h3 class="exercise-title">Bootstrap para la Mediana</h3>
+                                    <p class="exercise-subtitle">Análisis de Salarios</p>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="exercise-body h-100 d-flex flex-column justify-content-center">
+                                    <p class="exercise-description">
+                                        Descubre cómo la mediana es robusta ante valores atípicos en datos salariales de diferentes industrias.
+                                    </p>
+                                    <div class="mb-2">
+                                        <span class="difficulty-badge difficulty-basico">Básico</span>
+                                        <span class="badge bg-primary">12 min</span>
+                                    </div>
+                                    <div class="tags">
+                                        <span class="tag">Mediana</span>
+                                        <span class="tag">Outliers</span>
+                                        <span class="tag">Robustez</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Segunda fila (2 ejercicios) -->
+        <div class="row g-4 mb-4">
+            <!-- Ejercicio 3 -->
+            <div class="col-lg-6 col-md-6 fade-in" style="animation-delay: 0.2s;">
+                <a href="/ejercicio3" class="text-decoration-none">
+                    <div class="exercise-card exercise-3">
+                        <div class="row g-0 h-100">
+                            <div class="col-5">
+                                <div class="exercise-header h-100 d-flex flex-column justify-content-center">
+                                    <div class="exercise-number">3</div>
+                                    <div class="exercise-icon">
+                                        <i class="fas fa-industry"></i>
+                                    </div>
+                                    <h3 class="exercise-title">Bootstrap para Desv. Estándar</h3>
+                                    <p class="exercise-subtitle">Tiempos de Producción</p>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="exercise-body h-100 d-flex flex-column justify-content-center">
+                                    <p class="exercise-description">
+                                        Analiza la variabilidad en procesos de manufactura y aprende control de calidad estadístico.
+                                    </p>
+                                    <div class="mb-2">
+                                        <span class="difficulty-badge difficulty-intermedio">Intermedio</span>
+                                        <span class="badge bg-primary">15 min</span>
+                                    </div>
+                                    <div class="tags">
+                                        <span class="tag">Variabilidad</span>
+                                        <span class="tag">Calidad</span>
+                                        <span class="tag">Procesos</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Ejercicio 4 -->
+            <div class="col-lg-6 col-md-6 fade-in" style="animation-delay: 0.3s;">
+                <a href="/ejercicio4" class="text-decoration-none">
+                    <div class="exercise-card exercise-4">
+                        <div class="row g-0 h-100">
+                            <div class="col-5">
+                                <div class="exercise-header h-100 d-flex flex-column justify-content-center">
+                                    <div class="exercise-number">4</div>
+                                    <div class="exercise-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <h3 class="exercise-title">Bootstrap para Proporción</h3>
+                                    <p class="exercise-subtitle">Control de Calidad</p>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="exercise-body h-100 d-flex flex-column justify-content-center">
+                                    <p class="exercise-description">
+                                        Estima tasas de éxito y porcentajes con intervalos de confianza precisos en procesos industriales.
+                                    </p>
+                                    <div class="mb-2">
+                                        <span class="difficulty-badge difficulty-intermedio">Intermedio</span>
+                                        <span class="badge bg-primary">12 min</span>
+                                    </div>
+                                    <div class="tags">
+                                        <span class="tag">Proporción</span>
+                                        <span class="tag">Binomial</span>
+                                        <span class="tag">QC</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Tercera fila - 1 ejercicio centrado -->
+        <div class="row g-4 justify-content-center">
+            <!-- Ejercicio 5 -->
+            <div class="col-lg-6 col-md-8 fade-in" style="animation-delay: 0.4s;">
+                <a href="/ejercicio5" class="text-decoration-none">
+                    <div class="exercise-card exercise-5">
+                        <div class="row g-0 h-100">
+                            <div class="col-5">
+                                <div class="exercise-header h-100 d-flex flex-column justify-content-center">
+                                    <div class="exercise-number">5</div>
+                                    <div class="exercise-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <h3 class="exercise-title">Bootstrap para Percentil 90</h3>
+                                    <p class="exercise-subtitle">Excelencia Académica</p>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="exercise-body h-100 d-flex flex-column justify-content-center">
+                                    <p class="exercise-description">
+                                        Determina umbrales de excelencia y percentiles extremos con confianza en evaluaciones académicas.
+                                    </p>
+                                    <div class="mb-2">
+                                        <span class="difficulty-badge difficulty-avanzado">Avanzado</span>
+                                        <span class="badge bg-primary">18 min</span>
+                                    </div>
+                                    <div class="tags">
+                                        <span class="tag">Percentiles</span>
+                                        <span class="tag">Extremos</span>
+                                        <span class="tag">Educación</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Carrusel de Información -->
+<section id="info" class="info-carousel-section">
+    <div class="container">
+        <h2 class="text-center mb-5">
+            Descubre el <span style="background: linear-gradient(45deg, var(--mint), var(--plum)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Método Bootstrap</span>
+        </h2>
+        
+        <!-- Carrusel de Información - Layout Vertical -->
+        <div id="infoCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#infoCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#infoCarousel" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#infoCarousel" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#infoCarousel" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#infoCarousel" data-bs-slide-to="4"></button>
+            </div>
+            
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="info-card">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                        <div class="carousel-icon">
+                                            <i class="fas fa-magic"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="info-content">
+                                            <h3>¿Qué es Bootstrap?</h3>
+                                            <p>El Bootstrap es una técnica estadística poderosa que permite estimar la precisión de estadísticas muestrales mediante remuestreo. Es especialmente útil cuando no conocemos la distribución poblacional o cuando las fórmulas teóricas son complejas.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="info-card">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                        <div class="carousel-icon">
+                                            <i class="fas fa-recycle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="info-content">
+                                            <h3>Remuestreo Inteligente</h3>
+                                            <p>El proceso Bootstrap toma muestras aleatorias con reemplazo de los datos originales, creando miles de "nuevas muestras" del mismo tamaño. Cada muestra bootstrap nos da una estimación del parámetro de interés, construyendo así la distribución bootstrap.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3 -->
+                <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="info-card">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                        <div class="carousel-icon">
+                                            <i class="fas fa-chart-area"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="info-content">
+                                            <h3>Intervalos de Confianza</h3>
+                                            <p>Con Bootstrap podemos construir intervalos de confianza robustos sin asumir distribuciones específicas. El método percentil toma directamente los cuantiles de la distribución bootstrap, mientras que el método BCa corrige sesgos y asimetrías.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 4 -->
+                <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="info-card">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                        <div class="carousel-icon">
+                                            <i class="fas fa-cogs"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="info-content">
+                                            <h3>Aplicaciones Versátiles</h3>
+                                            <p>Bootstrap funciona con cualquier estadística: medias, medianas, desviaciones estándar, percentiles, correlaciones, coeficientes de regresión, y muchas más. Es especialmente útil para estadísticas complejas donde las fórmulas teóricas son difíciles de derivar.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 5 -->
+                <div class="carousel-item">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="info-card">
+                                <div class="row g-0">
+                                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                        <div class="carousel-icon">
+                                            <i class="fas fa-brain"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="info-content">
+                                            <h3>Ventajas Prácticas</h3>
+                                            <p>Bootstrap no requiere suposiciones sobre la distribución poblacional, es computacionalmente eficiente con datos modernos, proporciona estimaciones visuales de incertidumbre, y permite validar modelos complejos mediante técnicas como validación cruzada bootstrap.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#infoCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#infoCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-links">
+            <a href="#"><i class="fab fa-github"></i> GitHub</a>
+            <a href="#"><i class="fas fa-book"></i> Documentación</a>
+        </div>
+        <p>&copy; 2025 Bootstrap Interactivo | Plataforma Educativa de Estadística Avanzada</p>
+        <p class="text-muted mt-2">
+            <small>Desarrollado con tecnologías modernas para revolucionar el aprendizaje estadístico</small>
+        </p>
+    </div>
+</footer>
+
+<!-- Botón flotante -->
+<div class="float-button" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Crear partículas animadas con colores de la paleta
+function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const colors = ['rgba(137, 205, 241, 0.1)', 'rgba(126, 212, 173, 0.1)', 'rgba(244, 166, 166, 0.1)', 'rgba(244, 143, 177, 0.1)', 'rgba(168, 85, 247, 0.1)'];
+    
+    for (let i = 0; i < 25; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.width = Math.random() * 15 + 8 + 'px';
+        particle.style.height = particle.style.width;
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (Math.random() * 25 + 25) + 's';
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Scroll suave
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+// Scroll to top
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Animación de entrada para las cards
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.fade-in').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    observer.observe(el);
+});
+
+// Inicializar
+createParticles();
+
+// Efectos super dinámicos en las cards
+document.querySelectorAll('.exercise-card').forEach((card, index) => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-15px) rotateY(5deg) rotateX(5deg)';
+        
+        // Efecto de ondas en el hover
+        const ripple = document.createElement('div');
+        ripple.style.position = 'absolute';
+        ripple.style.top = '50%';
+        ripple.style.left = '50%';
+        ripple.style.width = '0';
+        ripple.style.height = '0';
+        ripple.style.background = 'rgba(255,255,255,0.2)';
+        ripple.style.borderRadius = '50%';
+        ripple.style.transform = 'translate(-50%, -50%)';
+        ripple.style.animation = 'ripple 0.6s ease-out';
+        ripple.style.pointerEvents = 'none';
+        
+        this.style.position = 'relative';
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+            if (ripple.parentNode) {
+                ripple.parentNode.removeChild(ripple);
+            }
+        }, 600);
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) rotateY(0deg) rotateX(0deg)';
+    });
+    
+    // Efecto de parallax suave
+    card.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
+        
+        this.style.transform = `translateY(-15px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+});
+
+// Agregar animación de ripple a los CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple {
+        to {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+// Pausar carrusel al hover
+const carousel = document.getElementById('infoCarousel');
+carousel.addEventListener('mouseenter', function() {
+    bootstrap.Carousel.getInstance(carousel).pause();
+});
+
+carousel.addEventListener('mouseleave', function() {
+    bootstrap.Carousel.getInstance(carousel).cycle();
+});
+
+// Efecto de typing en los títulos
+function typeWriter(element, text, speed = 100) {
+    let i = 0;
+    element.innerHTML = '';
+    function type() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+    type();
+}
+
+// Aplicar efecto typing cuando las cards entran en viewport
+const titleObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const title = entry.target.querySelector('.exercise-title');
+            if (title && !title.dataset.typed) {
+                const originalText = title.textContent;
+                typeWriter(title, originalText, 50);
+                title.dataset.typed = 'true';
+            }
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.exercise-card').forEach(card => {
+    titleObserver.observe(card);
+});
+</script>
+
+</body>
+</html>
